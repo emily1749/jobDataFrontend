@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 // import axios from "axios";
 import "./index.css";
 // import BarChart from "./BarChart";
+import BubbleSort from "./components/BubbleSort";
 
 // function createBars(props) {
 //   console.log("here");
@@ -17,15 +18,15 @@ class App extends React.Component {
       city: "",
       state: "",
       resultArray: [
-        ["typescript", "0.20", 0],
-        ["ruby", "1.52", 1],
-        ["python", "27.21", 2],
-        ["C++", "22.84", 3],
-        ["swift", "2.34", 4],
-        ["javascript", "17.16", 5],
-        ["php", "2.44", 6],
-        ["java", "17.56", 7],
-        ["C#", "8.22", 8],
+        ["Typescript", 0.2, 0],
+        ["Ruby", 1.52, 1],
+        ["Python", 27.21, 2],
+        ["C++", 22.84, 3],
+        ["Swift", 2.34, 4],
+        ["Javascript", 17.16, 5],
+        ["PHP", 2.44, 6],
+        ["Java", 17.56, 7],
+        ["C#", 8.22, 8],
       ],
     };
   }
@@ -129,6 +130,7 @@ class App extends React.Component {
               officia deserunt mollit anim id est laborum.
             </p>
             <br />
+            <br />
             <h2>Location</h2>
             {/* <div className="location-form"> */}
             <form onSubmit={this.onSubmit}>
@@ -153,13 +155,17 @@ class App extends React.Component {
               />
               <br />
               <br />
-              <button className="btn"> Submit Location</button>
+              <div className="buttonHolder">
+                <button className="btn"> Submit Location </button>
+              </div>
             </form>
             {/* </div> */}
 
             <br />
+            <br />
             <h2>Sorting Algorithm</h2>
-            <p>Bubble Sort</p>
+            <BubbleSort dataArray={this.state.resultArray} />
+
             <p>Sorting 2</p>
             <p>Sorting 3</p>
           </div>
