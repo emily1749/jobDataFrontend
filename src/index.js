@@ -119,39 +119,66 @@ class App extends React.Component {
   render() {
     const { city, state } = this.state;
     return (
-      <div>
-        <div>
-          <form onSubmit={this.onSubmit}>
-            <label>City:</label>
-            <input
-              type="text"
-              name="city"
-              value={city}
-              onChange={this.onChange}
-            />
+      <div className="container">
+        <div className="controls-container">
+          <div className="controls">
+            <h1>Job Skills Data Analysis</h1>
+            <p>
+              Lorem ipsum dolor sit asse cillum dolore eu fugiat nulla pariatur.
+              Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
+              officia deserunt mollit anim id est laborum.
+            </p>
+            <br />
+            <h2>Location</h2>
+            {/* <div className="location-form"> */}
+            <form onSubmit={this.onSubmit}>
+              <label>City:</label>
 
-            <label>State:</label>
-            <input
-              type="text"
-              name="state"
-              value={state}
-              onChange={this.onChange}
-            />
-            <button> Submit </button>
-          </form>
+              <input
+                type="text"
+                name="city"
+                className="input-text"
+                value={city}
+                onChange={this.onChange}
+              />
+              <br />
+              <label>State:</label>
+
+              <input
+                type="text"
+                name="state"
+                className="input-text"
+                value={state}
+                onChange={this.onChange}
+              />
+              <br />
+              <br />
+              <button className="btn"> Submit Location</button>
+            </form>
+            {/* </div> */}
+
+            <br />
+            <h2>Sorting Algorithm</h2>
+            <p>Bubble Sort</p>
+            <p>Sorting 2</p>
+            <p>Sorting 3</p>
+          </div>
         </div>
-        <div className="barGraph">
-          {this.state.resultArray.map((value, index) => (
-            // test
-            <div className="bargroup" key={value[2]}>
-              <div
-                className="bar"
-                style={{ height: `${value[1] * 10}px` }}
-              ></div>
-              <h2>{value[0]}</h2>
-              <p>{value[1]}%</p>{" "}
-            </div>
-          ))}
+
+        <div className="barGraph-container">
+          <div className="barGraph">
+            {this.state.resultArray.map((value, index) => (
+              // test
+              <div className="bargroup" key={value[2]}>
+                <div
+                  className="bar"
+                  style={{ height: `${value[1] * 10}px` }}
+                ></div>
+                <h2>{value[0]}</h2>
+                <p>{value[1]}%</p>{" "}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
