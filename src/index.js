@@ -17,17 +17,20 @@ class App extends React.Component {
     this.state = {
       city: "",
       state: "",
+      // let 0 mean blue, 1 mean yellow, 2 is green
       resultArray: [
-        ["Typescript", 0.2, 0],
-        ["Ruby", 1.52, 1],
-        ["Python", 27.21, 2],
-        ["C++", 22.84, 3],
-        ["Swift", 2.34, 4],
-        ["Javascript", 17.16, 5],
-        ["PHP", 2.44, 6],
-        ["Java", 17.56, 7],
-        ["C#", 8.22, 8],
+        ["Typescript", 0.2, 0, 0],
+        ["Ruby", 1.52, 1, 0],
+        ["Python", 27.21, 2, 0],
+        ["C++", 22.84, 3, 0],
+        ["Swift", 2.34, 4, 0],
+        ["Javascript", 17.16, 5, 0],
+        ["PHP", 2.44, 6, 0],
+        ["Java", 17.56, 7, 0],
+        ["C#", 8.22, 8, 0],
       ],
+      selectColor: "linear-gradient( #0278ae, #59b5d7)",
+      // selectIndex: 0,
     };
   }
 
@@ -90,6 +93,17 @@ class App extends React.Component {
     // });
     ///***AXIOS , UNCOMMENT LATER */
   };
+  //ONCHANGECOLOR
+  onChangeSelectColor = index => {
+    const color = [
+      "linear-gradient( #0278ae, #59b5d7)",
+      "linear-gradient( #fddb3a, #ffefa0)",
+      "linear-gradient( #79d70f, #a8df65)",
+    ];
+    this.setState({
+      selectColor: color[index],
+    });
+  };
 
   // componentDidMount() {
   //     //fetch here
@@ -119,6 +133,7 @@ class App extends React.Component {
   //   }
   render() {
     const { city, state } = this.state;
+    var self = this;
     return (
       <div className="container">
         <div className="controls-container">
@@ -164,7 +179,11 @@ class App extends React.Component {
             <br />
             <br />
             <h2>Sorting Algorithm</h2>
-            <BubbleSort dataArray={this.state.resultArray} />
+            {/* <BubbleSort
+              dataArray={this.state.resultArray}
+              selectColor={this.state.selectColor}
+              selectIndex={this.state.selectIndex}
+            /> */}
 
             <p>Sorting 2</p>
             <p>Sorting 3</p>
@@ -173,17 +192,45 @@ class App extends React.Component {
 
         <div className="barGraph-container">
           <div className="barGraph">
-            {this.state.resultArray.map((value, index) => (
-              // test
-              <div className="bargroup" key={value[2]}>
-                <div
-                  className="bar"
-                  style={{ height: `${value[1] * 10}px` }}
-                ></div>
-                <h2>{value[0]}</h2>
-                <p>{value[1]}%</p>{" "}
-              </div>
-            ))}
+            {this.state.resultArray.map(function(value, index) {
+              console.log("test");
+
+              const color = [
+                "linear-gradient( #0278ae, #59b5d7)",
+                "linear-gradient( #fddb3a, #ffefa0)",
+                "linear-gradient( #79d70f, #a8df65)",
+              ];
+
+              return (
+                <div className="bargroup" key={value[2]}>
+                  {/* <div className="bargroup"> */}
+                  {/* {color[1]} */}
+                  <div
+                    className="bar"
+                    // onChangeSelectColor={this.onChangeSelectColor.bind(this)}
+                    style={{
+                      backgroundImage: color[value[3]],
+                      // backgroundImage: {this.onChangeSelectColor(value[3])},
+                      // backgroundImage: this.state.selectColor,
+                      // backgroundColor: "#E9573F",
+                      height: `${value[1] * 10}px`,
+                    }}
+                    // style={{
+                    //   backgroundImage:
+                    //     "linear-gradient(to right, #0278ae, #59b5d7)",
+                    // }}
+                  ></div>
+                  <h2>{value[0]}</h2>
+                  <p>{value[1]}%</p>{" "}
+                </div>
+              );
+            })}
+
+            {/* //   console.log('here')
+              // }
+              
+              
+            // ))} */}
           </div>
         </div>
       </div>
@@ -193,7 +240,6 @@ class App extends React.Component {
       //   <BarChart />
     );
   }
-  //   return <div>Hi there!</div>;
 }
 
 ReactDOM.render(<App />, document.querySelector("#root"));
