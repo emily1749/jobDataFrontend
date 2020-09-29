@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 // import axios from "axios";
 import "./index.css";
 // import BarChart from "./BarChart";
-import BubbleSort from "./components/BubbleSort";
+// import BubbleSort from "./components/BubbleSort";
 
 // function createBars(props) {
 //   console.log("here");
@@ -30,6 +30,7 @@ class App extends React.Component {
         ["C#", 8.22, 8, 0],
       ],
       selectColor: "linear-gradient( #0278ae, #59b5d7)",
+      bubbleSort: false,
       // selectIndex: 0,
     };
   }
@@ -94,6 +95,7 @@ class App extends React.Component {
     ///***AXIOS , UNCOMMENT LATER */
   };
   //ONCHANGECOLOR
+
   onChangeSelectColor = index => {
     const color = [
       "linear-gradient( #0278ae, #59b5d7)",
@@ -105,6 +107,135 @@ class App extends React.Component {
     });
   };
 
+  updateState(sortingAlgorithm) {
+    if (sortingAlgorithm == "bubbleSort") {
+      this.setState({
+        bubbleSort: true,
+      });
+    }
+    console.log("result array updated");
+  }
+  componentDidUpdate() {
+    console.log("remounted");
+    // if (this.state.bubbleSort == true) {
+    //   console.log("oncomponentdidmount bubblesort");
+    //   this.bubbleSort();
+    //   //execute
+    // }
+  }
+  bubbleSort = () => {
+    // for (let i = 0; i < this.state.resultArray.length; i++) {
+    //   for (let j = 0; j < this.state.resultArray.length; j++) {
+    //     // code
+    //   }
+    // }
+    // for (let i = 0; i < dataArray.length; i++) {
+    // for (let j = 0; j < dataArray.length; j++) {
+    // bar div of dataArray[j], div of dataArray[j+1] = change to yellow
+    //
+    // if (dataArray[j][1] > dataArray[j + 1][1]) {
+    //switch bar div of dataArray[j], dataArray[j+1]
+    //just switch the state of it and it'll rerender
+    // }
+    //dataArray[j] change back to
+    // }
+    // }
+    let self = this;
+    console.log("on bubblesort");
+    let count = 0;
+    let dataArray = self.state.resultArray;
+    dataArray[0][3] = 1;
+    dataArray[1][3] = 1;
+    let round = 0;
+    self.setState({
+      resultArray: dataArray,
+    });
+    let myInterval = setInterval(() => {
+      let flag = true;
+      function swap(input, indexA, indexB) {
+        flag = false;
+        let temp = input[indexA];
+        input[indexA] = input[indexB];
+        input[indexB] = temp;
+        return input;
+      }
+
+      if (count >= 7) {
+        let dataArray = self.state.resultArray;
+        if (dataArray[count][1] > dataArray[count + 1][1]) {
+          swap(dataArray, count, count + 1);
+          self.setState({
+            resultArray: dataArray,
+          });
+        }
+        dataArray[8 - round][3] = 2;
+        self.setState({
+          resultArray: dataArray,
+        });
+        round++;
+        if (round === 7) {
+          console.log("clearinterval");
+          clearInterval(myInterval);
+        } else {
+          count = 0;
+        }
+
+        return;
+      } else {
+        //  if (count > 2) {
+        let dataArray = self.state.resultArray;
+        if (dataArray[count][1] > dataArray[count + 1][1]) {
+          swap(dataArray, count, count + 1);
+          self.setState({
+            resultArray: dataArray,
+          });
+        } else {
+          if (dataArray[count + 2][3] !== 2) {
+            dataArray[count][3] = 0;
+            dataArray[count + 2][3] = 1;
+            // console.log("dataArray:" + dataArray);
+            self.setState({
+              resultArray: dataArray,
+            });
+          }
+
+          count++;
+        }
+
+        // }
+        // let dataArray = self.state.resultArray;
+
+        // dataArray[count][3] = 2;
+        // dataArray[count + 1][3] = 2;
+        // self.setState({
+        //   resultArray: dataArray,
+        // });
+        // console.log("here");
+
+        console.log(count);
+      }
+      // if (flag === true) {
+      //   console.log("here");
+      //   let dataArray = self.state.resultArray;
+      //   dataArray.forEach(() => {
+      //     dataArray[3] = 2;
+      //   });
+      //   self.setState({
+      //     resultArray: dataArray,
+      //   });
+      // }
+    }, 200);
+
+    // myInterval();
+    // for (let count = 0; count < this.state.resultArray.length; count++) {
+    //   setInterval(() => {
+    //     this.state.resultArray.slice(0, count).map((bar, index) => {
+    //       console.log(bar);
+    //     });
+    //     count++;
+    //   }, 1000);
+    // }
+  };
   // componentDidMount() {
   //     //fetch here
   //   }
@@ -132,17 +263,18 @@ class App extends React.Component {
   //     // fetch();
   //   }
   render() {
+    console.log("rerendered!");
     const { city, state } = this.state;
     var self = this;
     return (
       <div className="container">
         <div className="controls-container">
           <div className="controls">
-            <h1>Job Skills Data Analysis</h1>
+            {/* <h1>Job Skills Data Analysis</h1> */}
             <p>
-              Lorem ipsum dolor sit asse cillum dolore eu fugiat nulla pariatur.
+              {/* Lorem ipsum dolor sit asse cillum dolore eu fugiat nulla pariatur.
               Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
-              officia deserunt mollit anim id est laborum.
+              officia deserunt mollit anim id est laborum. */}
             </p>
             <br />
             <br />
@@ -181,9 +313,21 @@ class App extends React.Component {
             <h2>Sorting Algorithm</h2>
             {/* <BubbleSort
               dataArray={this.state.resultArray}
-              selectColor={this.state.selectColor}
-              selectIndex={this.state.selectIndex}
+              updateState={this.updateState}
+              // selectIndex={this.state.selectIndex}
             /> */}
+            <button
+              className="bubbleSort"
+              onClick={
+                self.bubbleSort
+                // () =>
+                // self.setState({
+                //   bubbleSort: true,
+                // })
+              }
+            >
+              Bubble Sort
+            </button>
 
             <p>Sorting 2</p>
             <p>Sorting 3</p>
@@ -193,7 +337,7 @@ class App extends React.Component {
         <div className="barGraph-container">
           <div className="barGraph">
             {this.state.resultArray.map(function(value, index) {
-              console.log("test");
+              // console.log("test");
 
               const color = [
                 "linear-gradient( #0278ae, #59b5d7)",
