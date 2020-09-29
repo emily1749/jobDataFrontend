@@ -150,9 +150,11 @@ class App extends React.Component {
     self.setState({
       resultArray: dataArray,
     });
+    let flag = true;
+
     let myInterval = setInterval(() => {
-      let flag = true;
       function swap(input, indexA, indexB) {
+        console.log("swapped");
         flag = false;
         let temp = input[indexA];
         input[indexA] = input[indexB];
@@ -160,7 +162,7 @@ class App extends React.Component {
         return input;
       }
 
-      if (count >= 7) {
+      if (count === 7) {
         let dataArray = self.state.resultArray;
         if (dataArray[count][1] > dataArray[count + 1][1]) {
           swap(dataArray, count, count + 1);
@@ -173,11 +175,25 @@ class App extends React.Component {
           resultArray: dataArray,
         });
         round++;
-        if (round === 7) {
+        if (flag === true) {
+          let dataArray = self.state.resultArray;
+          dataArray.map(element => {
+            element[3] = 2;
+          });
+          self.setState({
+            resultArray: dataArray,
+          });
+          console.log("HERE");
           console.log("clearinterval");
           clearInterval(myInterval);
-        } else {
+        }
+        // if (round === 7) {
+        //   console.log("clearinterval");
+        //   clearInterval(myInterval);
+        // }
+        else {
           count = 0;
+          flag = true;
         }
 
         return;
@@ -224,7 +240,7 @@ class App extends React.Component {
       //     resultArray: dataArray,
       //   });
       // }
-    }, 200);
+    }, 100);
 
     // myInterval();
     // for (let count = 0; count < this.state.resultArray.length; count++) {
