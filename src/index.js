@@ -252,6 +252,70 @@ class App extends React.Component {
     //   }, 1000);
     // }
   };
+  quickSort = () => {
+    let self = this;
+    function swap(input, indexA, indexB) {
+      console.log("swapped");
+      // flag = false;
+      let temp = input[indexA];
+      input[indexA] = input[indexB];
+      input[indexB] = temp;
+      return input;
+    }
+    console.log("on quicksort");
+
+    function getPivotIndex(array, startIndex, endIndex) {
+      let dataArray = console.log("the start index is " + startIndex);
+      console.log("the end index is " + endIndex);
+      console.log("getpivotinde" + array);
+      console.log("endindex: " + array[endIndex]);
+      let pivotValue = array[endIndex][1];
+
+      let pivotIndex = startIndex;
+      dataArray[endIndex][3] = 2;
+      self.setState({
+        resultArray: dataArray,
+      });
+      for (let i = startIndex; i < endIndex; i++) {
+        if (array[i][1] < pivotValue) {
+          swap(array, i, pivotIndex);
+
+          pivotIndex++;
+          //swap(array[pivotIndex], array[pivotIndex]
+        }
+        // else {
+        //pivotindex++
+        // }
+        //code
+      }
+      // array.map((element, index) => {
+
+      // });
+      swap(array, pivotIndex, endIndex);
+      return pivotIndex;
+    }
+    function quickSortAlgorithm(array, startingIndex, endingIndex) {
+      console.log("startingindex" + startingIndex);
+      console.log("endingindex" + endingIndex);
+      if (startingIndex === endingIndex) {
+        return;
+      } else {
+        let index = getPivotIndex(array, startingIndex, endingIndex);
+
+        quickSortAlgorithm(array, startingIndex, index - 1);
+        quickSortAlgorithm(array, index + 1, endingIndex);
+      }
+    }
+
+    let dataArray = this.state.resultArray;
+    console.log(quickSortAlgorithm(dataArray, 0, 8));
+    //   let index=position(array,startIndex,endIndex){
+    //     quickSortAlgorithm(array, startIndex, index-1)
+    //     quickSortAlgorithm(array, index+1, end)
+    //   }
+    // }
+    //code
+  };
   // componentDidMount() {
   //     //fetch here
   //   }
@@ -344,7 +408,10 @@ class App extends React.Component {
             >
               Bubble Sort
             </button>
-
+            <br />
+            <button className="QuickSort" onClick={self.quickSort}>
+              Quick Sort
+            </button>
             <p>Sorting 2</p>
             <p>Sorting 3</p>
           </div>
@@ -358,7 +425,7 @@ class App extends React.Component {
               const color = [
                 "linear-gradient( #0278ae, #59b5d7)",
                 "linear-gradient( #fddb3a, #ffefa0)",
-                "linear-gradient( #79d70f, #a8df65)",
+                "linear-gradient( #79d70f, #bbd196)",
               ];
 
               return (
