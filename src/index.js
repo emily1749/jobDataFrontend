@@ -265,7 +265,8 @@ class App extends React.Component {
     console.log("on quicksort");
 
     function getPivotIndex(array, startIndex, endIndex) {
-      let dataArray = console.log("the start index is " + startIndex);
+      let dataArray = self.state.resultArray;
+      console.log("the start index is " + startIndex);
       console.log("the end index is " + endIndex);
       console.log("getpivotinde" + array);
       console.log("endindex: " + array[endIndex]);
@@ -297,7 +298,7 @@ class App extends React.Component {
     function quickSortAlgorithm(array, startingIndex, endingIndex) {
       console.log("startingindex" + startingIndex);
       console.log("endingindex" + endingIndex);
-      if (startingIndex === endingIndex) {
+      if (startingIndex >= endingIndex) {
         return;
       } else {
         let index = getPivotIndex(array, startingIndex, endingIndex);
