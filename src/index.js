@@ -101,6 +101,7 @@ class App extends React.Component {
       "linear-gradient( #0278ae, #59b5d7)",
       "linear-gradient( #fddb3a, #ffefa0)",
       "linear-gradient( #79d70f, #a8df65)",
+      "linear-gradient( #f76a8c, #ffaaa5)",
     ];
     this.setState({
       selectColor: color[index],
@@ -115,14 +116,14 @@ class App extends React.Component {
     }
     console.log("result array updated");
   }
-  componentDidUpdate() {
-    console.log("remounted");
-    // if (this.state.bubbleSort == true) {
-    //   console.log("oncomponentdidmount bubblesort");
-    //   this.bubbleSort();
-    //   //execute
-    // }
-  }
+  // componentDidUpdate() {
+  //   console.log("remounted");
+  //   // if (this.state.bubbleSort == true) {
+  //   //   console.log("oncomponentdidmount bubblesort");
+  //   //   this.bubbleSort();
+  //   //   //execute
+  //   // }
+  // }
   bubbleSort = () => {
     // for (let i = 0; i < this.state.resultArray.length; i++) {
     //   for (let j = 0; j < this.state.resultArray.length; j++) {
@@ -253,37 +254,88 @@ class App extends React.Component {
     // }
   };
   quickSort = () => {
+    console.log("on quicksort");
+
     let self = this;
-    function swap(input, indexA, indexB) {
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+    async function swap(input, indexA, indexB) {
+      // let dataArray = self.state.resultArray;
+      // let substringIndex = dataArray.indexOf(input[0]);
+      // console.log("substringIndex: " + substringIndex);
+      // console.log("input:" + input + "indexA  " + indexA + "indexB " + indexB);
+      // console.log("INPUT:");
+
+      // let dataArray = self.state.resultArray;
+      await sleep(500);
       console.log("swapped");
       // flag = false;
       let temp = input[indexA];
       input[indexA] = input[indexB];
       input[indexB] = temp;
+      // let spliceArray = dataArray.splice(substringIndex, input.length, input);
+      // console.log("splicearray: " + spliceArray);
+      // self.setState({
+      //   resultArray: spliceArray,
+      // });
+      // dataArray = input;
+      //NEED TO UPDATE STATE AFTER SWAP!!
+
+      // self.setState({
+      //   resultArray:
+      // })
       return input;
     }
-    console.log("on quicksort");
 
-    function getPivotIndex(array, startIndex, endIndex) {
+    async function changeColors(endIndex, number) {
       let dataArray = self.state.resultArray;
-      console.log("the start index is " + startIndex);
-      console.log("the end index is " + endIndex);
-      console.log("getpivotinde" + array);
-      console.log("endindex: " + array[endIndex]);
-      let pivotValue = array[endIndex][1];
-
-      let pivotIndex = startIndex;
-      dataArray[endIndex][3] = 2;
+      dataArray[endIndex][3] = number;
+      await sleep(500);
       self.setState({
         resultArray: dataArray,
       });
-      for (let i = startIndex; i < endIndex; i++) {
-        if (array[i][1] < pivotValue) {
-          swap(array, i, pivotIndex);
+    }
 
+    async function getPivotIndex(array, startIndex, endIndex) {
+      // let dataArray = self.state.resultArray;
+      // console.log("the start index is " + startIndex);
+      // console.log("the end index is " + endIndex);
+      // console.log("getpivotinde" + array);
+      // console.log("endindex: " + array[endIndex]);
+      // let arrayInput = array;
+      let pivotValue = array[endIndex][1];
+
+      let pivotIndex = startIndex;
+      await changeColors(endIndex, 3);
+      // dataArray[endIndex][3] = 2;
+
+      // self.setState({
+      //   resultArray: dataArray,
+      // });
+      for (let i = startIndex; i < endIndex; i++) {
+        // console.log("array:" + array);
+        // console.log("count i is: " + i);
+        // console.log("pivotIndex: " + pivotIndex);
+        await Promise.all([changeColors(i, 1), changeColors(pivotIndex, 1)]);
+        if (array[i][1] < pivotValue) {
+          // if (i === pivotIndex) {
+          //   // await swap(array, i, pivotIndex);
+          //   await changeColors(i, 0);
+          //   pivotIndex++;
+          // } else {
+          // await changeColors(i,)
+
+          await Promise.all([changeColors(i, 4), changeColors(pivotIndex, 4)]);
+          await swap(array, i, pivotIndex);
+          await Promise.all([changeColors(i, 0), changeColors(pivotIndex, 0)]);
           pivotIndex++;
           //swap(array[pivotIndex], array[pivotIndex]
+          // }
+        } else {
+          await changeColors(i, 0);
         }
+
         // else {
         //pivotindex++
         // }
@@ -292,19 +344,29 @@ class App extends React.Component {
       // array.map((element, index) => {
 
       // });
-      swap(array, pivotIndex, endIndex);
+      await swap(array, pivotIndex, endIndex);
+      await changeColors(pivotIndex, 0);
       return pivotIndex;
     }
-    function quickSortAlgorithm(array, startingIndex, endingIndex) {
+    async function quickSortAlgorithm(array, startingIndex, endingIndex) {
       console.log("startingindex" + startingIndex);
       console.log("endingindex" + endingIndex);
-      if (startingIndex >= endingIndex) {
+      if (startingIndex > endingIndex) {
+        // let dataArray = self.state.resultArray;
+        // dataArray.map(element => {
+        //   element[3] = 2;
+        // });
+        // self.setState({
+        //   resultArray: dataArray,
+        // });
         return;
       } else {
-        let index = getPivotIndex(array, startingIndex, endingIndex);
+        let index = await getPivotIndex(array, startingIndex, endingIndex);
 
-        quickSortAlgorithm(array, startingIndex, index - 1);
-        quickSortAlgorithm(array, index + 1, endingIndex);
+        await Promise.all([
+          quickSortAlgorithm(array, startingIndex, index - 1),
+          quickSortAlgorithm(array, index + 1, endingIndex),
+        ]);
       }
     }
 
@@ -424,9 +486,11 @@ class App extends React.Component {
               // console.log("test");
 
               const color = [
-                "linear-gradient( #0278ae, #59b5d7)",
-                "linear-gradient( #fddb3a, #ffefa0)",
-                "linear-gradient( #79d70f, #bbd196)",
+                "linear-gradient( #0278ae, #59b5d7)", //blue
+                "linear-gradient( #fddb3a, #ffefa0)", //yellow
+                "linear-gradient( #79d70f, #bbd196)", //green
+                "linear-gradient( #5c2a9d, #d789d7)", //purple
+                "linear-gradient( #f76a8c, #ffaaa5)", //pink/orange
               ];
 
               return (
