@@ -290,13 +290,12 @@ class App extends React.Component {
 
     async function changeColors(endIndex, number) {
       let dataArray = self.state.resultArray;
-      if (dataArray[endIndex]) {
-        dataArray[endIndex][3] = number;
-        await sleep(500);
-        self.setState({
-          resultArray: dataArray,
-        });
-      }
+
+      dataArray[endIndex][3] = number;
+      await sleep(500);
+      self.setState({
+        resultArray: dataArray,
+      });
     }
     async function setPivotIndex(index) {
       let dataArray = self.state.resultArray;
@@ -329,6 +328,7 @@ class App extends React.Component {
       let pivotValue = array[endIndex][1];
 
       let pivotIndex = startIndex;
+      await changeColors(endIndex, 3);
       await changeColors(endIndex, 3);
       // dataArray[endIndex][3] = 2;
 
@@ -379,21 +379,31 @@ class App extends React.Component {
         await Promise.all([
           changeColors(pivotIndex, 1),
           changeColors(endIndex, 1),
-        ]);
-        await swap(array, pivotIndex, endIndex);
-        await Promise.all([
-          changeColors(pivotIndex, 1),
-          changeColors(endIndex, 1),
-        ]);
+        ])
+          .then(async () => {
+            await swap(array, pivotIndex, endIndex);
+          })
+          .then(async () => {
+            await Promise.all([
+              changeColors(pivotIndex, 1),
+              changeColors(endIndex, 1),
+            ]);
+          })
+          .then(async () => {
+            // await setTimeout(() => {
+            await array.map((element, index) => {
+              changeColors(index, 0);
+            });
+          });
+      } else {
+        // await setTimeout(() => {
+        array.map((element, index) => {
+          changeColors(index, 0);
+        });
+        // changeColors(pivotIndex, 3);
+        await changeColors(pivotIndex, 0);
+        // }, 1000);
       }
-
-      // await setTimeout(() => {
-      array.map((element, index) => {
-        changeColors(index, 0);
-      });
-      // changeColors(pivotIndex, 3);
-      await changeColors(pivotIndex, 0);
-      // }, 1000);
 
       // await sleep(100);
       // await Promise.all([
