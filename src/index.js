@@ -19,15 +19,15 @@ class App extends React.Component {
       state: "",
       // let 0 mean blue, 1 mean yellow, 2 is green
       resultArray: [
-        ["Typescript", 0.2, 0, 0],
-        ["Ruby", 1.52, 1, 0],
-        ["Python", 27.21, 2, 0],
-        ["C++", 22.84, 3, 0],
-        ["Swift", 2.34, 4, 0],
-        ["Javascript", 17.16, 5, 0],
-        ["PHP", 2.44, 6, 0],
-        ["Java", 17.56, 7, 0],
-        ["C#", 8.22, 8, 0],
+        ["Typescript", 0.2, 0, 0, 0],
+        ["Ruby", 1.52, 0, 0, 1],
+        ["Python", 27.21, 0, 0, 2],
+        ["C++", 22.84, 0, 0, 3],
+        ["Swift", 2.34, 0, 0, 4],
+        ["Javascript", 17.16, 0, 0, 5],
+        ["PHP", 2.44, 0, 0, 6],
+        ["Java", 17.56, 0, 0, 7],
+        ["C#", 8.22, 0, 0, 8],
       ],
       selectColor: "linear-gradient( #0278ae, #59b5d7)",
       bubbleSort: false,
@@ -253,7 +253,7 @@ class App extends React.Component {
     //   }, 1000);
     // }
   };
-  quickSort = () => {
+  quickSort = async () => {
     console.log("on quicksort");
 
     let self = this;
@@ -290,14 +290,36 @@ class App extends React.Component {
 
     async function changeColors(endIndex, number) {
       let dataArray = self.state.resultArray;
-      dataArray[endIndex][3] = number;
-      await sleep(500);
+      if (dataArray[endIndex]) {
+        dataArray[endIndex][3] = number;
+        await sleep(500);
+        self.setState({
+          resultArray: dataArray,
+        });
+      }
+    }
+    async function setPivotIndex(index) {
+      let dataArray = self.state.resultArray;
+      dataArray[index][2] = 1;
+      // await sleep(500);
       self.setState({
         resultArray: dataArray,
       });
     }
 
     async function getPivotIndex(array, startIndex, endIndex) {
+      await Promise.all([
+        array.map(async (bar, barIndex) => {
+          console.log("changebarcolor");
+          // if (barIndex === pivotIndex && bar[2] === 1) {
+          //   setPivotIndex(barIndex);
+          // } else if (barIndex === pivotIndex) {
+          //   changeColors(pivotIndex, 3);
+          // } else {
+          await changeColors(barIndex, 0);
+          // }
+        }),
+      ]);
       // let dataArray = self.state.resultArray;
       // console.log("the start index is " + startIndex);
       // console.log("the end index is " + endIndex);
@@ -317,24 +339,32 @@ class App extends React.Component {
         // console.log("array:" + array);
         // console.log("count i is: " + i);
         // console.log("pivotIndex: " + pivotIndex);
-        await Promise.all([changeColors(i, 1), changeColors(pivotIndex, 1)]);
+        await Promise.all([changeColors(i, 2), changeColors(pivotIndex, 2)]);
         if (array[i][1] < pivotValue) {
-          // if (i === pivotIndex) {
-          //   // await swap(array, i, pivotIndex);
-          //   await changeColors(i, 0);
-          //   pivotIndex++;
-          // } else {
-          // await changeColors(i,)
+          if (i === pivotIndex) {
+            //   // await swap(array, i, pivotIndex);
+            await changeColors(i, 2);
+            pivotIndex++;
+          } else {
+            // await changeColors(i);
 
-          await Promise.all([changeColors(i, 4), changeColors(pivotIndex, 4)]);
-          await swap(array, i, pivotIndex);
-          await Promise.all([changeColors(i, 0), changeColors(pivotIndex, 0)]);
-          pivotIndex++;
-          //swap(array[pivotIndex], array[pivotIndex]
-          // }
-        } else {
-          await changeColors(i, 0);
+            await Promise.all([
+              changeColors(i, 4),
+              changeColors(pivotIndex, 4),
+            ]);
+            await swap(array, i, pivotIndex);
+            await Promise.all([
+              changeColors(i, 2),
+              changeColors(pivotIndex, 2),
+            ]);
+            pivotIndex++;
+            //swap(array[pivotIndex], array[pivotIndex]
+          }
         }
+
+        // else {
+        //   await changeColors(i, 2);
+        // }
 
         // else {
         //pivotindex++
@@ -344,10 +374,44 @@ class App extends React.Component {
       // array.map((element, index) => {
 
       // });
-      await swap(array, pivotIndex, endIndex);
+
+      if (pivotIndex !== endIndex) {
+        await Promise.all([
+          changeColors(pivotIndex, 1),
+          changeColors(endIndex, 1),
+        ]);
+        await swap(array, pivotIndex, endIndex);
+        await Promise.all([
+          changeColors(pivotIndex, 1),
+          changeColors(endIndex, 1),
+        ]);
+      }
+
+      // await setTimeout(() => {
+      array.map((element, index) => {
+        changeColors(index, 0);
+      });
+      // changeColors(pivotIndex, 3);
       await changeColors(pivotIndex, 0);
+      // }, 1000);
+
+      // await sleep(100);
+      // await Promise.all([
+      //   array.map(async (bar, barIndex) => {
+      //     console.log("changebarcolor");
+      //     // if (barIndex === pivotIndex && bar[2] === 1) {
+      //     //   setPivotIndex(barIndex);
+      //     // } else if (barIndex === pivotIndex) {
+      //     //   changeColors(pivotIndex, 3);
+      //     // } else {
+      //     await changeColors(barIndex, 0);
+      //     // }
+      //   }),
+      // ]);
+      console.log("now return");
       return pivotIndex;
     }
+
     async function quickSortAlgorithm(array, startingIndex, endingIndex) {
       console.log("startingindex" + startingIndex);
       console.log("endingindex" + endingIndex);
@@ -359,19 +423,42 @@ class App extends React.Component {
         // self.setState({
         //   resultArray: dataArray,
         // });
+        // await sleep(3000);
         return;
       } else {
         let index = await getPivotIndex(array, startingIndex, endingIndex);
+        // await sleep(1000);
 
         await Promise.all([
           quickSortAlgorithm(array, startingIndex, index - 1),
           quickSortAlgorithm(array, index + 1, endingIndex),
         ]);
+        // let dataArray = self.state.resultArray;
+        // await dataArray.map(async (bar, barIndex) => {
+        //   await sleep(100);
+        //   bar[3] = 2;
+        // });
+        // self.setState({
+        //   resultArray: dataArray,
+        // });
       }
     }
 
     let dataArray = this.state.resultArray;
-    console.log(quickSortAlgorithm(dataArray, 0, 8));
+    await quickSortAlgorithm(dataArray, 0, 8).then(async () => {
+      // await sleep(200);
+      setTimeout(() => {
+        dataArray.map((bar, barIndex) => {
+          console.log("in dataarraymap");
+          // await sleep(100);
+          bar[3] = 2;
+        });
+        self.setState({
+          resultArray: dataArray,
+        });
+      }, 1000);
+    });
+
     //   let index=position(array,startIndex,endIndex){
     //     quickSortAlgorithm(array, startIndex, index-1)
     //     quickSortAlgorithm(array, index+1, end)
@@ -494,7 +581,7 @@ class App extends React.Component {
               ];
 
               return (
-                <div className="bargroup" key={value[2]}>
+                <div className="bargroup" key={value[4]}>
                   {/* <div className="bargroup"> */}
                   {/* {color[1]} */}
                   <div
