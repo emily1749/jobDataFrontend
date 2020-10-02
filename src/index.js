@@ -23,6 +23,7 @@ class App extends React.Component {
         ["Ruby", 1.52, 0, 0, 1],
         ["Python", 27.21, 0, 0, 2],
         ["C++", 22.84, 0, 0, 3],
+        ["Golang", 0.4, 0, 0, 9],
         ["Swift", 2.34, 0, 0, 4],
         ["Javascript", 17.16, 0, 0, 5],
         ["PHP", 2.44, 0, 0, 6],
@@ -163,7 +164,7 @@ class App extends React.Component {
         return input;
       }
 
-      if (count === 7) {
+      if (count === 8) {
         let dataArray = self.state.resultArray;
         if (dataArray[count][1] > dataArray[count + 1][1]) {
           swap(dataArray, count, count + 1);
@@ -171,7 +172,7 @@ class App extends React.Component {
             resultArray: dataArray,
           });
         }
-        dataArray[8 - round][3] = 2;
+        dataArray[9 - round][3] = 2;
         self.setState({
           resultArray: dataArray,
         });
@@ -269,7 +270,7 @@ class App extends React.Component {
       // console.log("INPUT:");
 
       // let dataArray = self.state.resultArray;
-      await sleep(300);
+      await sleep(200);
       console.log("swapped");
       // flag = false;
       let temp = input[indexA];
@@ -298,7 +299,7 @@ class App extends React.Component {
       self.setState({
         resultArray: dataArray,
       });
-      await sleep(300);
+      await sleep(200);
 
       // }
     }
@@ -418,13 +419,13 @@ class App extends React.Component {
 
       if (pivotIndex !== endIndex) {
         await Promise.all([
-          changeColors(pivotIndex, 1),
-          changeColors(endIndex, 1),
+          changeColors(pivotIndex, 4),
+          changeColors(endIndex, 4),
         ]);
         await swap(array, pivotIndex, endIndex);
         await Promise.all([
-          changeColors(pivotIndex, 1),
-          changeColors(endIndex, 1),
+          changeColors(pivotIndex, 4),
+          changeColors(endIndex, 4),
         ]);
         await Promise.all([resetColor(pivotIndex), resetColor(endIndex)]);
       }
@@ -503,7 +504,7 @@ class App extends React.Component {
     }
 
     let dataArray = this.state.resultArray;
-    await quickSortAlgorithm(dataArray, 0, 8).then(async () => {
+    await quickSortAlgorithm(dataArray, 0, 9).then(async () => {
       // await sleep(200);
       setTimeout(() => {
         dataArray.map((bar, barIndex) => {
@@ -514,7 +515,7 @@ class App extends React.Component {
         self.setState({
           resultArray: dataArray,
         });
-      }, 300);
+      }, 200);
     });
 
     //   let index=position(array,startIndex,endIndex){
