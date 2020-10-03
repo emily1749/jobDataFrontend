@@ -526,7 +526,7 @@ class App extends React.Component {
     //code
   };
 
-  mergeSort = () => {
+  mergeSort = async () => {
     let self = this;
     console.log("on mergesort");
     let round = 0;
@@ -534,6 +534,7 @@ class App extends React.Component {
     function sleep(ms) {
       return new Promise(resolve => setTimeout(resolve, ms));
     }
+
     async function swap(input, indexA, indexB) {
       await sleep(200);
       console.log("swapped");
@@ -564,59 +565,162 @@ class App extends React.Component {
       await sleep(0.1);
     }
 
-    function mergeSortAlgorithm(array) {
-      if (array.length <= 1) {
-        return array;
-      }
-      //code
-      let midPoint = Math.floor(array.length / 2);
-      console.log(midPoint);
-      let leftArray = array.slice(0, midPoint);
-      let rightArray = array.slice(midPoint);
-      console.log("rightArraY: " + rightArray + "leftArray" + leftArray);
-      return sortArray(
-        mergeSortAlgorithm(leftArray),
-        mergeSortAlgorithm(rightArray)
-      );
-    }
+    //CODE BELOW
 
-    function sortArray(arrayA, arrayB) {
-      round++;
-      if (round === 11 || round === 12 || round === 13 || round === 14) {
-      }
-      //code
-      let result = [];
-      let countA = 0;
-      let countB = 0;
-      // for(let i=0;i< arrayA.length; i++){
+    // async function mergeSortAlgorithm(array) {
+    //   if (array.length <= 1) {
+    //     return array;
+    //   }
+    //   //code
+    //   let midPoint = Math.floor(array.length / 2);
+    //   console.log(midPoint);
+    //   let leftArray = array.slice(0, midPoint);
+    //   let rightArray = array.slice(midPoint);
+    //   console.log("rightArraY: " + rightArray + "leftArray" + leftArray);
+    //   return await sortArray(
+    //     await mergeSortAlgorithm(leftArray),
+    //     await mergeSortAlgorithm(rightArray)
+    //   );
+    // }
+
+    // async function sortArray(arrayA, arrayB) {
+    //   round++;
+    //   console.log("ROUND" + round);
+    //   if (round === 11 || round === 12 || round === 13 || round === 14) {
+    //   }
+    //   //code
+    //   let result = [];
+    //   let countA = 0;
+    //   let countB = 0;
+    //   // for(let i=0;i< arrayA.length; i++){
+
+    //   // }
+
+    //   while (countA < arrayA.length && countB < arrayB.length) {
+    //     console.log("arrayA: " + arrayA[countA]);
+    //     console.log("arrayB: " + arrayB[countB]);
+    //     if (arrayA[countA][1] < arrayB[countB][1]) {
+    //       await changeColors(countA, 1).then(() => {
+    //         result.push(arrayA[countA]);
+    //         countA++;
+    //       });
+
+    //       // countA++;
+    //     } else {
+    //       await changeColors(countB, 1).then(() => {
+    //         result.push(arrayB[countB]);
+    //         countB++;
+    //       });
+
+    //       // countB++;
+    //     }
+    //     console.log("resultPush: " + result);
+    //   }
+    //   console.log("ARRAYB" + (await arrayB));
+    //   console.log("ARRAYA" + (await arrayA));
+    //   let A = [];
+    //   let B = [];
+    //   if (await arrayB) {
+    //     let B = (await arrayB).slice(countB);
+    //   }
+    //   if (await arrayA) {
+    //     let A = (await arrayA).slice(countA);
+    //   }
+    //   console.log("RESULTFUNC" + (await result).concat(A).concat(B));
+    //   return (await result).concat(A).concat(B);
+
+    //CODE ABOVE
+
+    //   console.log(
+    //     "return from func:" +
+    //       result.concat(arrayA.slice(countA).concat(arrayB.slice(countB)))
+    //   );
+    //   console.log("ROUND: " + round);
+    //   return result.concat(arrayA.slice(countA).concat(arrayB.slice(countB)));
+    // }
+    // }
+    // function
+    async function changeSingleColor(item, number) {
+      let dataArray = self.state.resultArray;
+      let index = dataArray.indexOf(item);
+      dataArray[index][3] = number;
+      // dataArray[endIndex][3] = number;
+      self.setState({
+        resultArray: dataArray,
+      });
+      await sleep(500);
 
       // }
-      while (countA < arrayA.length && countB < arrayB.length) {
-        console.log("arrayA: " + arrayA[countA]);
-        console.log("arrayB: " + arrayB[countB]);
-        if (arrayA[countA][1] < arrayB[countB][1]) {
-          result.push(arrayA[countA]);
-          countA++;
-          // countA++;
-        } else {
-          result.push(arrayB[countB]);
-          countB++;
-          // countB++;
-        }
-        console.log("resultPush: " + result);
-      }
-      console.log(
-        "return from func:" +
-          result.concat(arrayA.slice(countA).concat(arrayB.slice(countB)))
-      );
-      console.log("ROUND: " + round);
-      return result.concat(arrayA.slice(countA).concat(arrayB.slice(countB)));
+    }
+    async function mergeSortAlgorithm(arr) {
+      if (arr.length <= 1) return arr;
+      let mid = Math.floor(arr.length / 2),
+        left = await mergeSortAlgorithm(arr.slice(0, mid)),
+        right = await mergeSortAlgorithm(arr.slice(mid));
+      console.log("left: " + left + "right" + right);
+      let dataArray = self.state.resultArray;
+      let indexLeft = dataArray.indexOf(left[0][0]);
+      console.log("indexLeft" + indexLeft);
+
+      let mergeResult = await merge(left, right);
+      let lengthTotal = mergeResult.length;
+
+      dataArray.splice(indexLeft, lengthTotal, mergeResult);
+      self.setState({
+        resultArray: dataArray,
+      });
+      console.log("dataarray" + dataArray);
+      return mergeResult;
     }
 
-    // function
+    // console.log(mergeSortAlgoirt(unsortedArr));
+
+    async function merge(arr1, arr2) {
+      // let arr1
+      await Promise.all([
+        arr1.map((element, index) => {
+          changeSingleColor(element, 1);
+        }),
+      ]);
+      await Promise.all([
+        arr2.map((element, index) => {
+          changeSingleColor(element, 3);
+        }),
+      ]);
+      let sorted = [];
+      await sleep(200);
+      while (arr1.length && arr2.length) {
+        // await changeColors(0, 3);
+        if (arr1[0][1] < arr2[0][1]) {
+          await Promise.all([
+            changeSingleColor(arr1[0], 4),
+            changeSingleColor(arr2[0], 4),
+          ]);
+          sorted.push(arr1.shift());
+          // await Promise.all([
+          //   changeSingleColor(arr1[0], 4),
+          //   changeSingleColor(arr2[0], 4),
+          // ]);
+        } else {
+          sorted.push(arr2.shift());
+        }
+      }
+      await Promise.all([
+        arr1.map((element, index) => {
+          changeSingleColor(element, 0);
+        }),
+        arr2.map((element, index) => {
+          changeSingleColor(element, 0);
+        }),
+      ]);
+      return sorted.concat(arr1.slice().concat(arr2.slice()));
+    }
+
+    // console.log(merge([2, 5, 10, 57], [9, 12, 13]));
+
     let dataArray = self.state.resultArray;
-    console.log("final result" + mergeSortAlgorithm(dataArray));
-    dataArray = mergeSortAlgorithm(dataArray);
+    // console.log("final result" + mergeSortAlgorithm(dataArray));
+    dataArray = await mergeSortAlgorithm(dataArray);
     self.setState({
       resultArray: dataArray,
     });
@@ -703,7 +807,7 @@ class App extends React.Component {
               // selectIndex={this.state.selectIndex}
             /> */}
             <button
-              className="bubbleSort"
+              className="sortingAlgorithm"
               onClick={
                 self.bubbleSort
                 // () =>
@@ -715,11 +819,11 @@ class App extends React.Component {
               Bubble Sort
             </button>
             <br />
-            <button className="QuickSort" onClick={self.quickSort}>
+            <button className="sortingAlgorithm" onClick={self.quickSort}>
               Quick Sort
             </button>
             <br />
-            <button className="MergeSort" onClick={self.mergeSort}>
+            <button className="sortingAlgorithm" onClick={self.mergeSort}>
               Merge Sort
             </button>
             {/* <p>Sorting 2</p>
