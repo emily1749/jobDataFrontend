@@ -525,6 +525,103 @@ class App extends React.Component {
     // }
     //code
   };
+
+  mergeSort = () => {
+    let self = this;
+    console.log("on mergesort");
+    let round = 0;
+
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+    async function swap(input, indexA, indexB) {
+      await sleep(200);
+      console.log("swapped");
+      let temp = input[indexA];
+      input[indexA] = input[indexB];
+      input[indexB] = temp;
+
+      return input;
+    }
+
+    async function changeColors(endIndex, number) {
+      let dataArray = self.state.resultArray;
+      dataArray[endIndex][3] = number;
+      self.setState({
+        resultArray: dataArray,
+      });
+      await sleep(200);
+
+      // }
+    }
+
+    async function resetColor(endIndex) {
+      let dataArray = self.state.resultArray;
+      dataArray[endIndex][3] = 0;
+      self.setState({
+        resultArray: dataArray,
+      });
+      await sleep(0.1);
+    }
+
+    function mergeSortAlgorithm(array) {
+      if (array.length <= 1) {
+        return array;
+      }
+      //code
+      let midPoint = Math.floor(array.length / 2);
+      console.log(midPoint);
+      let leftArray = array.slice(0, midPoint);
+      let rightArray = array.slice(midPoint);
+      console.log("rightArraY: " + rightArray + "leftArray" + leftArray);
+      return sortArray(
+        mergeSortAlgorithm(leftArray),
+        mergeSortAlgorithm(rightArray)
+      );
+    }
+
+    function sortArray(arrayA, arrayB) {
+      round++;
+      if (round === 11 || round === 12 || round === 13 || round === 14) {
+      }
+      //code
+      let result = [];
+      let countA = 0;
+      let countB = 0;
+      // for(let i=0;i< arrayA.length; i++){
+
+      // }
+      while (countA < arrayA.length && countB < arrayB.length) {
+        console.log("arrayA: " + arrayA[countA]);
+        console.log("arrayB: " + arrayB[countB]);
+        if (arrayA[countA][1] < arrayB[countB][1]) {
+          result.push(arrayA[countA]);
+          countA++;
+          // countA++;
+        } else {
+          result.push(arrayB[countB]);
+          countB++;
+          // countB++;
+        }
+        console.log("resultPush: " + result);
+      }
+      console.log(
+        "return from func:" +
+          result.concat(arrayA.slice(countA).concat(arrayB.slice(countB)))
+      );
+      console.log("ROUND: " + round);
+      return result.concat(arrayA.slice(countA).concat(arrayB.slice(countB)));
+    }
+
+    // function
+    let dataArray = self.state.resultArray;
+    console.log("final result" + mergeSortAlgorithm(dataArray));
+    dataArray = mergeSortAlgorithm(dataArray);
+    self.setState({
+      resultArray: dataArray,
+    });
+  };
+
   // componentDidMount() {
   //     //fetch here
   //   }
@@ -621,8 +718,12 @@ class App extends React.Component {
             <button className="QuickSort" onClick={self.quickSort}>
               Quick Sort
             </button>
-            <p>Sorting 2</p>
-            <p>Sorting 3</p>
+            <br />
+            <button className="MergeSort" onClick={self.mergeSort}>
+              Merge Sort
+            </button>
+            {/* <p>Sorting 2</p>
+            <p>Sorting 3</p> */}
           </div>
         </div>
 
