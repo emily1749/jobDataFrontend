@@ -706,6 +706,17 @@ class App extends React.Component {
         let arrayAIndex = arrayA[0][0];
         let lengthTotal = arrayA.length + arrayB.length;
         let sorted = [];
+
+        let dataArray = self.state.resultArray;
+        let dataArrayCopy = dataArray;
+        let indexA = 0;
+        dataArray.forEach((element, index) => {
+          // console.log("ARRAYACOPY" + arrayACopy);
+          if (element[0] == arrayAIndex) {
+            indexA = index;
+            return;
+          }
+        });
         // console.log("arrayACopy1: " + arrayACopy);
         // let arr1
         await Promise.all([
@@ -722,12 +733,11 @@ class App extends React.Component {
         await sleep(200);
         while (arrayA.length && arrayB.length) {
           // await changeColors(0, 3);
+          await Promise.all([
+            changeSingleColor(arrayA[0], 4),
+            changeSingleColor(arrayB[0], 4),
+          ]);
           if (arrayA[0][1] < arrayB[0][1]) {
-            await Promise.all([
-              changeSingleColor(arrayA[0], 4),
-              changeSingleColor(arrayB[0], 4),
-            ]);
-
             sorted.push(arrayA.shift());
 
             // let dataArray = self.state.resultArray;
@@ -785,19 +795,53 @@ class App extends React.Component {
             //   resultArray: result,
             // });
           }
+
+          let dataArray = self.state.resultArray;
+          let dataArrayCopy = dataArray;
+          // let indexA = 0;
+
+          // console.log("SORTED" + sorted);
+          // console.log("ARRAYA " + (await arrayA.slice()));
+          // console.log("ARRAYB" + (await arrayB.slice()));
+
+          let resultMergeArray = sorted.concat(
+            arrayA.slice().concat(arrayB.slice())
+          );
+          // console.log("FIRST" + dataArray.slice(0, indexA));
+          // console.log("SECOND" + resultMergeArray);
+          // console.log("THIRD" + dataArrayCopy.slice(lengthTotal + indexA, 10));
+          let resultMergeReturn = dataArray
+            .slice(0, indexA)
+            .concat(resultMergeArray)
+            .concat(dataArrayCopy.slice(lengthTotal + indexA, 10));
+          // console.log("RESULTMERGERETURN " + resultMergeArray);
+          self.setState({
+            resultArray: resultMergeReturn,
+          });
+
+          await Promise.all([
+            arrayA.map((element, index) => {
+              changeSingleColor(element, 1);
+            }),
+          ]);
+          await Promise.all([
+            arrayB.map((element, index) => {
+              changeSingleColor(element, 3);
+            }),
+          ]);
         }
 
-        let dataArray = self.state.resultArray;
-        let dataArrayCopy = dataArray;
-        let indexA = 0;
+        // let dataArray = self.state.resultArray;
+        // let dataArrayCopy = dataArray;
+        // let indexA = 0;
 
-        dataArray.forEach((element, index) => {
-          // console.log("ARRAYACOPY" + arrayACopy);
-          if (element[0] == arrayAIndex) {
-            indexA = index;
-            return;
-          }
-        });
+        // dataArray.forEach((element, index) => {
+        //   // console.log("ARRAYACOPY" + arrayACopy);
+        //   if (element[0] == arrayAIndex) {
+        //     indexA = index;
+        //     return;
+        //   }
+        // });
         console.log("SORTED" + sorted);
         console.log("ARRAYA " + (await arrayA.slice()));
         console.log("ARRAYB" + (await arrayB.slice()));
