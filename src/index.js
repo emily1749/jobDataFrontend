@@ -678,6 +678,13 @@ class App extends React.Component {
       // console.log("indexLeft" + indexLeft);
 
       let mergeResult = await merge(left, right);
+      // let dataArray = self.state.resultArray;
+      // await Promise.all(
+      //   dataArray.map((element, index) => {
+      //     changeColors(index, 2);
+      //   })
+      // );
+
       // console.log("mergesortresult" + mergeResult);
       // let lengthTotal = mergeResult.length;
       // console.log("dataarraybefore" + dataArray);
@@ -884,9 +891,16 @@ class App extends React.Component {
     let dataArray = self.state.resultArray;
     // console.log("final result" + mergeSortAlgorithm(dataArray));
     dataArray = await mergeSortAlgorithm(dataArray);
-    self.setState({
-      resultArray: dataArray,
-    });
+
+    // self.setState({
+    //   resultArray: dataArray,
+    // });
+    // await sleep(200);
+    await Promise.all([
+      dataArray.map((element, index) => {
+        changeColors(index, 2);
+      }),
+    ]);
   };
 
   // componentDidMount() {
@@ -923,11 +937,11 @@ class App extends React.Component {
       <div className="container">
         <div className="controls-container">
           <div className="controls">
-            {/* <h1>Job Skills Data Analysis</h1> */}
+            <h1>Job Skills Data Analysis</h1>
             <p>
-              {/* Lorem ipsum dolor sit asse cillum dolore eu fugiat nulla pariatur.
+              Lorem ipsum dolor sit asse cillum dolore eu fugiat nulla pariatur.
               Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
-              officia deserunt mollit anim id est laborum. */}
+              officia deserunt mollit anim id est laborum.
             </p>
             <br />
             <br />
