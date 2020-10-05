@@ -21,6 +21,10 @@
   background: #151525;
 }
 
+.controls p {
+  /* text-align: justify; */
+}
+
 .controls-container {
   /* position: absolute; */
   height: 95%;
@@ -139,7 +143,9 @@ select {
 
 .btn {
   background: rgba(255, 255, 255, 0.1);
-  padding: 8px 24px 8px 24px;
+
+  padding: 4px;
+  width: 75%;
   border-radius: 50px;
   display: inline-block;
   outline: none;
@@ -156,12 +162,65 @@ select {
 /* Sorting Algorithms */
 
 .sortingAlgorithm {
+  position: relative;
   background: none;
   border: none;
   display: inline-block;
+  padding: 0px 30px;
+  letter-spacing: 3px;
+  overflow: hidden;
+  transition: 0.25s ease-in;
   width: 100%;
   outline: none;
 }
 
-.btn:hover {
+.controls h2 {
+  text-align: center;
 }
+/* .btn:hover {
+} */
+
+.sortingAlgorithm span:nth-child(1) {
+  position: absolute;
+  display: block;
+  bottom: 0;
+  right: -100%;
+  width: 100%;
+  height: 1.5px;
+  /* background: #fff; */
+}
+
+.sortingAlgorithm:hover span:nth-child(1) {
+  right: 0%;
+  transition: 0.4s;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0),
+    #fff,
+    rgba(255, 255, 255, 0)
+  );
+}
+
+.activeSort {
+  color: rgb(255, 0, 0);
+}
+/* 
+.sortingAlgorithm span:nth-child(2) {
+  position: absolute;
+  display: block;
+  bottom: 0;
+  left: 50%;
+  width: 100%;
+  height: 1px;
+}
+
+.sortingAlgorithm:hover span:nth-child(2) {
+  left: 0%;
+  transition: 0.4s;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0),
+    #fff,
+    rgba(255, 255, 255, 0)
+  );
+} */

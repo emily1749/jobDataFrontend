@@ -14,6 +14,7 @@ import "./index.css";
 class App extends React.Component {
   constructor() {
     super();
+    // this.addActiveClass = this.addActiveClass.bind(this);
     this.state = {
       city: "",
       state: "",
@@ -32,9 +33,21 @@ class App extends React.Component {
       ],
       selectColor: "linear-gradient( #0278ae, #59b5d7)",
       bubbleSort: false,
+      active: false,
       // selectIndex: 0,
     };
   }
+  toggleClass= ()=> {
+    const currentState = this.state.active;
+    this.setState({
+      active: !currentState,
+    });
+  }
+  // selectStyle = e => {
+  //   this.setState({
+  //     bgColor: "#fddb3a
+  //   })
+  // }
 
   onChange = e => {
     this.setState({
@@ -737,7 +750,7 @@ class App extends React.Component {
           }),
         ]);
 
-        await sleep(200);
+        await sleep(400);
         while (arrayA.length && arrayB.length) {
           // await changeColors(0, 3);
           await Promise.all([
@@ -939,9 +952,10 @@ class App extends React.Component {
           <div className="controls">
             <h1>Job Skills Data Analysis</h1>
             <p>
-              Lorem ipsum dolor sit asse cillum dolore eu fugiat nulla pariatur.
-              Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
-              officia deserunt mollit anim id est laborum.
+              This app analyzes and compares the percentage of job openings for
+              several of the most popular programming languages per location.
+              Enter a city and state to retrieve the location's data. Next,
+              choose a sorting algorithm to visually sort the data!
             </p>
             <br />
             <br />
@@ -974,7 +988,6 @@ class App extends React.Component {
               </div>
             </form>
             {/* </div> */}
-
             <br />
             <br />
             <h2>Sorting Algorithm</h2>
@@ -983,10 +996,23 @@ class App extends React.Component {
               updateState={this.updateState}
               // selectIndex={this.state.selectIndex}
             /> */}
+            {/* <div */}
+            {/* // className={this.state.active ? "activeSort" : 0} */}
+            {/* // onClick={this.toggleClass} */}
+            {/* > */}{" "}
             <button
-              className="sortingAlgorithm"
+              className=
+              // {
+                // `
+                "sortingAlgorithm"
+              // ${
+              //   this.state.active ? "activeSort" : 0
+              // }`
+            // }
               onClick={
-                self.bubbleSort
+                (self.bubbleSort
+                  // , this.toggleClass
+                  )
                 // () =>
                 // self.setState({
                 //   bubbleSort: true,
@@ -994,15 +1020,27 @@ class App extends React.Component {
               }
             >
               Bubble Sort
+              <span></span>
+              <span></span>
             </button>
+            {/* </div> */}
             <br />
             <button className="sortingAlgorithm" onClick={self.quickSort}>
               Quick Sort
+              <span></span>
+              <span></span>
             </button>
             <br />
             <button className="sortingAlgorithm" onClick={self.mergeSort}>
               Merge Sort
+              <span></span>
+              <span></span>
             </button>
+            <br />
+            <br />
+            <div className="buttonHolder">
+              <button className="btn"> Reset Sort</button>
+            </div>
             {/* <p>Sorting 2</p>
             <p>Sorting 3</p> */}
           </div>
@@ -1019,6 +1057,7 @@ class App extends React.Component {
                 "linear-gradient( #79d70f, #bbd196)", //green
                 "linear-gradient( #5c2a9d, #d789d7)", //purple
                 "linear-gradient( #f76a8c, #ffaaa5)", //pink/orange
+                // "linear-gradient( #ff5f40, #eebb4d)", //orange
               ];
 
               return (
