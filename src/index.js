@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 // import axios from "axios";
 import "./index.css";
 // import BarChart from "./BarChart";
-// import BubbleSort from "./components/BubbleSort";
+import BubbleSort from "./components/BubbleSort";
 
 // function createBars(props) {
 //   console.log("here");
@@ -14,6 +14,7 @@ import "./index.css";
 class App extends React.Component {
   constructor() {
     super();
+    this.handler = this.handler.bind(this)
     // this.addActiveClass = this.addActiveClass.bind(this);
     this.state = {
       city: "",
@@ -31,11 +32,20 @@ class App extends React.Component {
         ["Java", 17.56, 0, 0, 7],
         ["C#", 8.22, 0, 0, 8],
       ],
-      selectColor: "linear-gradient( #0278ae, #59b5d7)",
-      bubbleSort: false,
-      active: false,
+      showBubbleSort: false
+      // selectColor: "linear-gradient( #0278ae, #59b5d7)",
+      // bubbleSort: false,
+      // active: false,
       // selectIndex: 0,
     };
+  }
+  handler=(dataArray)=>{
+    this.setState({
+      resultArray: dataArray
+    })
+  }
+  bubbleSort = ()=> {
+    BubbleSort()
   }
   toggleClass= ()=> {
     const currentState = this.state.active;
@@ -110,26 +120,6 @@ class App extends React.Component {
   };
   //ONCHANGECOLOR
 
-  onChangeSelectColor = index => {
-    const color = [
-      "linear-gradient( #0278ae, #59b5d7)",
-      "linear-gradient( #fddb3a, #ffefa0)",
-      "linear-gradient( #79d70f, #a8df65)",
-      "linear-gradient( #f76a8c, #ffaaa5)",
-    ];
-    this.setState({
-      selectColor: color[index],
-    });
-  };
-
-  updateState(sortingAlgorithm) {
-    if (sortingAlgorithm == "bubbleSort") {
-      this.setState({
-        bubbleSort: true,
-      });
-    }
-    console.log("result array updated");
-  }
   // componentDidUpdate() {
   //   console.log("remounted");
   //   // if (this.state.bubbleSort == true) {
@@ -138,135 +128,135 @@ class App extends React.Component {
   //   //   //execute
   //   // }
   // }
-  bubbleSort = () => {
-    // for (let i = 0; i < this.state.resultArray.length; i++) {
-    //   for (let j = 0; j < this.state.resultArray.length; j++) {
-    //     // code
-    //   }
-    // }
-    // for (let i = 0; i < dataArray.length; i++) {
-    // for (let j = 0; j < dataArray.length; j++) {
-    // bar div of dataArray[j], div of dataArray[j+1] = change to yellow
-    //
-    // if (dataArray[j][1] > dataArray[j + 1][1]) {
-    //switch bar div of dataArray[j], dataArray[j+1]
-    //just switch the state of it and it'll rerender
-    // }
-    //dataArray[j] change back to
-    // }
-    // }
-    let self = this;
-    console.log("on bubblesort");
-    let count = 0;
-    let dataArray = self.state.resultArray;
-    dataArray[0][3] = 1;
-    dataArray[1][3] = 1;
-    let round = 0;
-    self.setState({
-      resultArray: dataArray,
-    });
-    let flag = true;
+  // bubbleSort = () => {
+  //   // for (let i = 0; i < this.state.resultArray.length; i++) {
+  //   //   for (let j = 0; j < this.state.resultArray.length; j++) {
+  //   //     // code
+  //   //   }
+  //   // }
+  //   // for (let i = 0; i < dataArray.length; i++) {
+  //   // for (let j = 0; j < dataArray.length; j++) {
+  //   // bar div of dataArray[j], div of dataArray[j+1] = change to yellow
+  //   //
+  //   // if (dataArray[j][1] > dataArray[j + 1][1]) {
+  //   //switch bar div of dataArray[j], dataArray[j+1]
+  //   //just switch the state of it and it'll rerender
+  //   // }
+  //   //dataArray[j] change back to
+  //   // }
+  //   // }
+  //   let self = this;
+  //   console.log("on bubblesort");
+  //   let count = 0;
+  //   let dataArray = self.state.resultArray;
+  //   dataArray[0][3] = 1;
+  //   dataArray[1][3] = 1;
+  //   let round = 0;
+  //   self.setState({
+  //     resultArray: dataArray,
+  //   });
+  //   let flag = true;
 
-    let myInterval = setInterval(() => {
-      function swap(input, indexA, indexB) {
-        console.log("swapped");
-        flag = false;
-        let temp = input[indexA];
-        input[indexA] = input[indexB];
-        input[indexB] = temp;
-        return input;
-      }
+  //   let myInterval = setInterval(() => {
+  //     function swap(input, indexA, indexB) {
+  //       console.log("swapped");
+  //       flag = false;
+  //       let temp = input[indexA];
+  //       input[indexA] = input[indexB];
+  //       input[indexB] = temp;
+  //       return input;
+  //     }
 
-      if (count === 8) {
-        let dataArray = self.state.resultArray;
-        if (dataArray[count][1] > dataArray[count + 1][1]) {
-          swap(dataArray, count, count + 1);
-          self.setState({
-            resultArray: dataArray,
-          });
-        }
-        dataArray[9 - round][3] = 2;
-        self.setState({
-          resultArray: dataArray,
-        });
-        round++;
-        if (flag === true) {
-          let dataArray = self.state.resultArray;
-          dataArray.map(element => {
-            element[3] = 2;
-          });
-          self.setState({
-            resultArray: dataArray,
-          });
-          console.log("HERE");
-          console.log("clearinterval");
-          clearInterval(myInterval);
-        }
-        // if (round === 7) {
-        //   console.log("clearinterval");
-        //   clearInterval(myInterval);
-        // }
-        else {
-          count = 0;
-          flag = true;
-        }
+  //     if (count === 8) {
+  //       let dataArray = self.state.resultArray;
+  //       if (dataArray[count][1] > dataArray[count + 1][1]) {
+  //         swap(dataArray, count, count + 1);
+  //         self.setState({
+  //           resultArray: dataArray,
+  //         });
+  //       }
+  //       dataArray[9 - round][3] = 2;
+  //       self.setState({
+  //         resultArray: dataArray,
+  //       });
+  //       round++;
+  //       if (flag === true) {
+  //         let dataArray = self.state.resultArray;
+  //         dataArray.map(element => {
+  //           element[3] = 2;
+  //         });
+  //         self.setState({
+  //           resultArray: dataArray,
+  //         });
+  //         console.log("HERE");
+  //         console.log("clearinterval");
+  //         clearInterval(myInterval);
+  //       }
+  //       // if (round === 7) {
+  //       //   console.log("clearinterval");
+  //       //   clearInterval(myInterval);
+  //       // }
+  //       else {
+  //         count = 0;
+  //         flag = true;
+  //       }
 
-        return;
-      } else {
-        //  if (count > 2) {
-        let dataArray = self.state.resultArray;
-        if (dataArray[count][1] > dataArray[count + 1][1]) {
-          swap(dataArray, count, count + 1);
-          self.setState({
-            resultArray: dataArray,
-          });
-        } else {
-          if (dataArray[count + 2][3] !== 2) {
-            dataArray[count][3] = 0;
-            dataArray[count + 2][3] = 1;
-            // console.log("dataArray:" + dataArray);
-            self.setState({
-              resultArray: dataArray,
-            });
-          }
+  //       return;
+  //     } else {
+  //       //  if (count > 2) {
+  //       let dataArray = self.state.resultArray;
+  //       if (dataArray[count][1] > dataArray[count + 1][1]) {
+  //         swap(dataArray, count, count + 1);
+  //         self.setState({
+  //           resultArray: dataArray,
+  //         });
+  //       } else {
+  //         if (dataArray[count + 2][3] !== 2) {
+  //           dataArray[count][3] = 0;
+  //           dataArray[count + 2][3] = 1;
+  //           // console.log("dataArray:" + dataArray);
+  //           self.setState({
+  //             resultArray: dataArray,
+  //           });
+  //         }
 
-          count++;
-        }
+  //         count++;
+  //       }
 
-        // }
-        // let dataArray = self.state.resultArray;
+  //       // }
+  //       // let dataArray = self.state.resultArray;
 
-        // dataArray[count][3] = 2;
-        // dataArray[count + 1][3] = 2;
-        // self.setState({
-        //   resultArray: dataArray,
-        // });
-        // console.log("here");
+  //       // dataArray[count][3] = 2;
+  //       // dataArray[count + 1][3] = 2;
+  //       // self.setState({
+  //       //   resultArray: dataArray,
+  //       // });
+  //       // console.log("here");
 
-        console.log(count);
-      }
-      // if (flag === true) {
-      //   console.log("here");
-      //   let dataArray = self.state.resultArray;
-      //   dataArray.forEach(() => {
-      //     dataArray[3] = 2;
-      //   });
-      //   self.setState({
-      //     resultArray: dataArray,
-      //   });
-      // }
-    }, 150);
+  //       console.log(count);
+  //     }
+  //     // if (flag === true) {
+  //     //   console.log("here");
+  //     //   let dataArray = self.state.resultArray;
+  //     //   dataArray.forEach(() => {
+  //     //     dataArray[3] = 2;
+  //     //   });
+  //     //   self.setState({
+  //     //     resultArray: dataArray,
+  //     //   });
+  //     // }
+  //   }, 150);
 
-    // myInterval();
-    // for (let count = 0; count < this.state.resultArray.length; count++) {
-    //   setInterval(() => {
-    //     this.state.resultArray.slice(0, count).map((bar, index) => {
-    //       console.log(bar);
-    //     });
-    //     count++;
-    //   }, 1000);
-    // }
-  };
+  //   // myInterval();
+  //   // for (let count = 0; count < this.state.resultArray.length; count++) {
+  //   //   setInterval(() => {
+  //   //     this.state.resultArray.slice(0, count).map((bar, index) => {
+  //   //       console.log(bar);
+  //   //     });
+  //   //     count++;
+  //   //   }, 1000);
+  //   // }
+  // };
 
   quickSort = async () => {
     console.log("on quicksort");
@@ -950,13 +940,13 @@ class App extends React.Component {
       <div className="container">
         <div className="controls-container">
           <div className="controls">
-            <h1>Job Skills Data Analysis</h1>
+            {/* <h1>Job Skills Data Analysis</h1>
             <p>
               This app analyzes and compares the percentage of job openings for
               several of the most popular programming languages per location.
               Enter a city and state to retrieve the location's data. Next,
               choose a sorting algorithm to visually sort the data!
-            </p>
+            </p> */}
             <br />
             <br />
             <h2>Location</h2>
@@ -1001,6 +991,7 @@ class App extends React.Component {
             {/* // onClick={this.toggleClass} */}
             {/* > */}{" "}
             <button
+            onClick = {self.bubbleSort}
               className=
               // {
                 // `
@@ -1009,20 +1000,23 @@ class App extends React.Component {
               //   this.state.active ? "activeSort" : 0
               // }`
             // }
-              onClick={
-                (self.bubbleSort
-                  // , this.toggleClass
-                  )
-                // () =>
-                // self.setState({
-                //   bubbleSort: true,
-                // })
-              }
+              // onClick={
+              //   (self.bubbleSort
+              //     // , this.toggleClass
+              //     )
+              //   // () =>
+              //   // self.setState({
+              //   //   bubbleSort: true,
+              //   // })
+              // }
             >
+              {/* <BubbleSort /> */}
+              {/* Bubble Sort */}
               Bubble Sort
               <span></span>
               <span></span>
             </button>
+            {/* {self.state.showBubbleSort ? <BubbleSort resultArray={self.state.resultArray} handler = {self.handler}/> : null} */}
             {/* </div> */}
             <br />
             <button className="sortingAlgorithm" onClick={self.quickSort}>
