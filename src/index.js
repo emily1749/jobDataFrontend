@@ -1,6 +1,8 @@
+//add extra box with more data
+
 import React from "react";
 import ReactDOM from "react-dom";
-// import axios from "axios";
+import axios from "axios";
 import "./index.css";
 
 class App extends React.Component {
@@ -11,28 +13,28 @@ class App extends React.Component {
       city: "",
       state: "",
       resultArrayOriginal: [
-        ["Typescript", 0.2, 0, 0, 0],
-        ["Ruby", 1.52, 0, 0, 1],
-        ["Python", 27.21, 0, 0, 2],
-        ["C++", 22.84, 0, 0, 3],
-        ["Golang", 0.4, 0, 0, 9],
-        ["Swift", 2.34, 0, 0, 4],
-        ["Javascript", 17.16, 0, 0, 5],
-        ["PHP", 2.44, 0, 0, 6],
-        ["Java", 17.56, 0, 0, 7],
-        ["C#", 8.22, 0, 0, 8],
+        // ["Typescript", 0.2, 0, 0, 0],
+        // ["Ruby", 1.52, 0, 0, 1],
+        // ["Python", 27.21, 0, 0, 2],
+        // ["C++", 22.84, 0, 0, 3],
+        // ["Golang", 0.4, 0, 0, 9],
+        // ["Swift", 2.34, 0, 0, 4],
+        // ["Javascript", 17.16, 0, 0, 5],
+        // ["PHP", 2.44, 0, 0, 6],
+        // ["Java", 17.56, 0, 0, 7],
+        // ["C#", 8.22, 0, 0, 8],
       ],
       resultArray: [
-        ["Typescript", 0.2, 0, 0, 0],
-        ["Ruby", 1.52, 0, 0, 1],
-        ["Python", 27.21, 0, 0, 2],
-        ["C++", 22.84, 0, 0, 3],
-        ["Golang", 0.4, 0, 0, 9],
-        ["Swift", 2.34, 0, 0, 4],
-        ["Javascript", 17.16, 0, 0, 5],
-        ["PHP", 2.44, 0, 0, 6],
-        ["Java", 17.56, 0, 0, 7],
-        ["C#", 8.22, 0, 0, 8],
+        // ["Typescript", 0.2, 0, 0, 0],
+        // ["Ruby", 1.52, 0, 0, 1],
+        // ["Python", 27.21, 0, 0, 2],
+        // ["C++", 22.84, 0, 0, 3],
+        // ["Golang", 0.4, 0, 0, 9],
+        // ["Swift", 2.34, 0, 0, 4],
+        // ["Javascript", 17.16, 0, 0, 5],
+        // ["PHP", 2.44, 0, 0, 6],
+        // ["Java", 17.56, 0, 0, 7],
+        // ["C#", 8.22, 0, 0, 8],
       ],
       bubbleColor: "",
       quickColor: "",
@@ -49,7 +51,7 @@ class App extends React.Component {
       const resultArrayCopy = JSON.parse(
         JSON.stringify(self.state.resultArrayOriginal)
       );
-
+      console.log(resultArrayCopy);
       self.setState({
         resultArray: resultArrayCopy,
 
@@ -64,164 +66,221 @@ class App extends React.Component {
   //     bgColor: "#f08a5d",
   //   });
   // };
+  onChange = e => {
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
+  };
   onSubmit = e => {
-    //****BELOW- AXIOS WORKS */
-    // e.preventDefault();
-    // let resultArrayFetch = [];
-    // let { city, state } = this.state;
-    // city = city.replace(" ", "+");
-    // console.log("city: " + city + "State:" + state);
-    // var self = this;
-    // let totalValue = 0;
-    // let count = 0;
-    // axios
-    //   .get("https://jobskillsapi.emlin.repl.co/jobData/" + city + "/" + state)
-    //   .then(function(response) {
-    //     response = response.data;
-    //     Object.values(response).forEach(function(value) {
-    //       console.log("value:  " + value);
-    //       totalValue += value;
-    //       console.log("totalvalue:" + totalValue);
-    //     });
-    //     for (const [key, value] of Object.entries(response)) {
-    //       console.log(totalValue);
-    //       let keyResult = key;
-    //       let percentage = ((value / totalValue) * 100).toFixed(2);
-    //       if (keyResult === "C%23") {
-    //         keyResult = "C#";
-    //       }
-    //       if (keyResult === "C%2B%2B") {
-    //         keyResult = "C++";
-    //       }
-    //       resultArrayFetch.push([keyResult, percentage, count]);
-    //       count++; //for the key later on
-    //     }
-    //     console.log(resultArrayFetch);
-    //     self.setState({ resultArray: resultArrayFetch });
-    //     //0: (3) ["typescript", "0.20", 0]
-    //     // 1: (3) ["ruby", "1.52", 1]
-    //     // 2: (3) ["python", "27.21", 2]
-    //     // 3: (3) ["C++", "22.84", 3]
-    //     // 4: (3) ["swift", "2.34", 4]
-    //     // 5: (3) ["javascript", "17.16", 5]
-    //     // 6: (3) ["php", "2.44", 6]
-    //     // 7: (3) ["java", "17.56", 7]
-    //     // 8: (3) ["C#", "8.22", 8]
-    //     console.log("resultarray: " + self.state.resultArray);
-    //     console.log("resultarray: " + self.state.resultArray[1]);
-    // });
-    ///***AXIOS , UNCOMMENT LATER */
-    //store it into
+    if (this.state.onSort === false) {
+      e.preventDefault();
+      let resultArrayFetch = [];
+      let { city, state } = this.state;
+      city = city.replace(" ", "+");
+      console.log("city: " + city + "State:" + state);
+      var self = this;
+      let totalValue = 0;
+      let count = 0;
+      axios
+        .get("https://jobskillsapi.emlin.repl.co/jobData/" + city + "/" + state)
+        .then(function(response) {
+          response = response.data;
+          Object.values(response).forEach(function(value) {
+            console.log("value:  " + value);
+            totalValue += value;
+            console.log("totalvalue:" + totalValue);
+          });
+          for (const [key, value] of Object.entries(response)) {
+            console.log(totalValue);
+            let keyResult = key;
+            let percentage = ((value / totalValue) * 100).toFixed(2);
+            if (keyResult === "C%23") {
+              keyResult = "C#";
+            }
+            if (keyResult === "C%2B%2B") {
+              keyResult = "C++";
+            }
+            resultArrayFetch.push([keyResult, percentage, count]);
+            count++; //for the key later on
+          }
+          console.log(resultArrayFetch);
+          resultArrayFetch.forEach((element, index) => {
+            let percent = element[1];
+            element[1] = parseFloat(percent);
+
+            element.push(0);
+          });
+          console.log(resultArrayFetch);
+          const resultArrayCopy = JSON.parse(JSON.stringify(resultArrayFetch));
+          self.setState({
+            resultArrayOriginal: resultArrayCopy,
+            resultArray: resultArrayFetch,
+          });
+
+          //0: (3) ["typescript", "0.20", 0]
+          // 1: (3) ["ruby", "1.52", 1]
+          // 2: (3) ["python", "27.21", 2]
+          // 3: (3) ["C++", "22.84", 3]
+          // 4: (3) ["swift", "2.34", 4]
+          // 5: (3) ["javascript", "17.16", 5]
+          // 6: (3) ["php", "2.44", 6]
+          // 7: (3) ["java", "17.56", 7]
+          // 8: (3) ["C#", "8.22", 8]
+          console.log("resultarray: " + self.state.resultArray);
+          console.log("resultarray: " + self.state.resultArray[1]);
+        });
+    }
   };
 
   bubbleSort = () => {
-    //check that no other sorts are selected
-    if (
-      this.state.bubbleColor === "" &&
-      this.state.quickColor === "" &&
-      this.state.mergeColor === "" &&
-      this.state.onSort === false
-    ) {
-      //select the sort, change font color
-      this.setState({
-        bubbleColor: "#f08a5d",
-        onSort: true,
-        buttonColor: "#00587a",
-      });
-      console.log("on bubblesort");
-
-      //variables
-      let self = this;
-      let dataArray = self.state.resultArray;
-      //Count for number of bars
-      let count = 0;
-      //Round for how many times run through entire graph
-      let round = 0;
-      //indicates whether a bar has been swapped during this round
-      let flag = true;
-
-      //Set the color of first two bars to be yellow
-      dataArray[0][3] = 1;
-      dataArray[1][3] = 1;
-
-      //update state, rerender
-      self.setState({
-        resultArray: dataArray,
-      });
-
-      let myInterval = setInterval(() => {
-        //Function swaps the bars in the array
-        function swap(input, indexA, indexB) {
-          flag = false;
-          let temp = input[indexA];
-          input[indexA] = input[indexB];
-          input[indexB] = temp;
-          return input;
-        }
-
-        //if at the end of the bar chart
-        if (count === 8) {
+    let self = this;
+    console.log("on bubblesort");
+    let count = 0;
+    let dataArray = self.state.resultArray;
+    dataArray[0][3] = 1;
+    dataArray[1][3] = 1;
+    let round = 0;
+    self.setState({
+      resultArray: dataArray,
+    });
+    let flag = true;
+    let myInterval = setInterval(() => {
+      function swap(input, indexA, indexB) {
+        console.log("swapped");
+        flag = false;
+        let temp = input[indexA];
+        input[indexA] = input[indexB];
+        input[indexB] = temp;
+        return input;
+      }
+      if (count === 7) {
+        let dataArray = self.state.resultArray;
+        if (dataArray[count][1] > dataArray[count + 1][1]) {
+          swap(dataArray, count, count + 1);
+          resultArray: dataArray,
+        });
+        round++;
+        if (flag === true) {
           let dataArray = self.state.resultArray;
-          //if next one is greater, swap
-          if (dataArray[count][1] > dataArray[count + 1][1]) {
-            swap(dataArray, count, count + 1);
-            self.setState({
-              resultArray: dataArray,
-            });
-          }
-          //Update colors
-          dataArray[9 - round][3] = 2;
+          dataArray.map(element => {
+            element[3] = 2;
+          });
           self.setState({
             resultArray: dataArray,
           });
-          //Increase the round count
-          round++;
-          //if at the end of the array and no swaps, all items are sorted
-          if (flag === true) {
-            let dataArray = self.state.resultArray;
-            //Update each bar color to green
-            dataArray.forEach(element => {
-              element[3] = 2;
-            });
-            self.setState({
-              resultArray: dataArray,
-              onSort: false,
-              buttonColor: "#fff",
-            });
-            //Clear interval, sorting is complete
-            clearInterval(myInterval);
-          } else {
-            count = 0;
-            flag = true;
-          }
-          return;
-        }
-        // else not at the end of the graph
-        else {
-          let dataArray = self.state.resultArray;
-          //if the item is greater than the next, swap
-          if (dataArray[count][1] > dataArray[count + 1][1]) {
-            swap(dataArray, count, count + 1);
-            //update state
-            self.setState({
-              resultArray: dataArray,
-            });
-          } else {
-            if (dataArray[count + 2][3] !== 2) {
-              //update colors of the bars, and update the state
-              dataArray[count][3] = 0;
-              dataArray[count + 2][3] = 1;
-              self.setState({
-                resultArray: dataArray,
-              });
-            }
-            //Increase count at the end of round
-            count++;
-          }
-        }
-      }, 170);
-    }
-  };
+  // bubbleSort = () => {
+  //   //check that no other sorts are selected
+  //   if (
+  //     this.state.bubbleColor === "" &&
+  //     this.state.quickColor === "" &&
+  //     this.state.mergeColor === "" &&
+  //     this.state.onSort === false
+  //   ) {
+  //     //select the sort, change font color
+  //     this.setState({
+  //       bubbleColor: "#f08a5d",
+  //       onSort: true,
+  //       buttonColor: "#00587a",
+  //     });
+  //     console.log("on bubblesort");
+
+  //     //variables
+  //     let self = this;
+  //     let dataArray = self.state.resultArray;
+  //     //Count for number of bars
+  //     let count = 0;
+  //     //Round for how many times run through entire graph
+  //     let round = 0;
+  //     //indicates whether a bar has been swapped during this round
+  //     let flag = true;
+
+  //     //Set the color of first two bars to be yellow
+  //     dataArray[0][3] = 1;
+  //     dataArray[1][3] = 1;
+
+  //     //update state, rerender
+  //     self.setState({
+  //       resultArray: dataArray,
+  //     });
+
+  //     let myInterval = setInterval(() => {
+  //       if (count === 0) {
+  //       }
+  //       //Function swaps the bars in the array
+  //       function swap(input, indexA, indexB) {
+  //         flag = false;
+  //         let temp = input[indexA];
+  //         input[indexA] = input[indexB];
+  //         input[indexB] = temp;
+  //         return input;
+  //       }
+
+  //       //if at the end of the bar chart
+  //       if (count === 8) {
+  //         let dataArray = self.state.resultArray;
+  //         //if next one is greater, swap
+  //         if (dataArray[count][1] > dataArray[count + 1][1]) {
+  //           swap(dataArray, count, count + 1);
+  //           self.setState({
+  //             resultArray: dataArray,
+  //           });
+  //         }
+  //         //Update colors
+  //         dataArray[9 - round][3] = 2;
+  //         self.setState({
+  //           resultArray: dataArray,
+  //         });
+  //         //Increase the round count
+  //         round++;
+  //         //if at the end of the array and no swaps, all items are sorted
+  //         if (flag === true) {
+  //           let dataArray = self.state.resultArray;
+  //           //Update each bar color to green
+  //           dataArray.forEach(element => {
+  //             element[3] = 2;
+  //           });
+  //           self.setState({
+  //             resultArray: dataArray,
+  //             onSort: false,
+  //             buttonColor: "#fff",
+  //           });
+  //           //Clear interval, sorting is complete
+  //           clearInterval(myInterval);
+  //         } else {
+  //           count = 0;
+  //           flag = true;
+  //         }
+  //         return;
+  //       }
+  //       // else not at the end of the graph
+  //       else {
+  //         let dataArray = self.state.resultArray;
+  //         //if the item is greater than the next, swap
+  //         if (dataArray[count][1] > dataArray[count + 1][1]) {
+  //           swap(dataArray, count, count + 1);
+  //           //update state
+  //           self.setState({
+  //             resultArray: dataArray,
+  //           });
+  //         }
+  //         // } else if ((count === 1 && dataArray[0][3] = 1)) {
+  //         else {
+  //           if (count === 0 && dataArray[count + 1][3] !== 2)
+  //             if (dataArray[count + 2][3] !== 2) {
+  //               //update colors of the bars, and update the state
+  //               dataArray[count][3] = 0;
+  //               dataArray[count + 2][3] = 1;
+  //               self.setState({
+  //                 resultArray: dataArray,
+  //               });
+  //             }
+  //           //Increase count at the end of round
+  //           count++;
+  //         }
+  //       }
+  //     }, 170);
+  //   }
+  // };
 
   quickSort = async () => {
     if (
@@ -567,26 +626,26 @@ class App extends React.Component {
     }
   };
 
-  //   handleSubmit(event) {
-  //     event.preventDefault();
-  //     // const data = newFormData(event.target);
-  //     const data = event.target;
-  //     console.log(data.get(city));
-  //     // axios
-  //     //   .get(
-  //     //     "https://jobskillsapi.emlin.repl.co/jobData/san+francisco/california"
-  //     //   )
-  //     //   .then(function(response) {
-  //     //     console.log(response.data);
-  //     //     console.log("in axios");
-  //     //   });
-  //     // event.preventDefault("api url", {
-  //     //   method: "GET",
-  //     // body: data
-  //     // });
-  //     //   const data =
-  //     // fetch();
-  //   }
+  // handleSubmit(event) {
+  //   event.preventDefault();
+  //   // const data = newFormData(event.target);
+  //   const data = event.target;
+  //   console.log(data.get(city));
+  //   // axios
+  //   //   .get(
+  //   //     "https://jobskillsapi.emlin.repl.co/jobData/san+francisco/california"
+  //   //   )
+  //   //   .then(function(response) {
+  //   //     console.log(response.data);
+  //   //     console.log("in axios");
+  //   //   });
+  //   // event.preventDefault("api url", {
+  //   //   method: "GET",
+  //   // body: data
+  //   // });
+  //   //   const data =
+  //   // fetch();
+  // }
 
   render() {
     // console.log("rerendered!");
@@ -634,8 +693,7 @@ class App extends React.Component {
                   className="btn"
                   style={{ color: this.state.buttonColor }}
                 >
-                  {" "}
-                  Submit Location{" "}
+                  Submit Location
                 </button>
               </div>
             </form>
@@ -696,11 +754,11 @@ class App extends React.Component {
                 "linear-gradient( #fddb3a, #ffefa0)", //yellow
                 "linear-gradient( #79d70f, #bbd196)", //green
                 "linear-gradient( #5c2a9d, #d789d7)", //purple
-                "linear-gradient( #f76a8c, #ffaaa5)", //pink/orange
+                "linear-gradient( #f76a8c, #ffaaa5)", //pink/red
               ];
 
               return (
-                <div className="bargroup" key={value[4]}>
+                <div className="bargroup" key={value[2]}>
                   <div
                     className="bar"
                     style={{
