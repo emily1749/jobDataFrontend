@@ -10,6 +10,18 @@ class App extends React.Component {
     this.state = {
       city: "",
       state: "",
+      resultArrayOriginal: [
+        ["Typescript", 0.2, 0, 0, 0],
+        ["Ruby", 1.52, 0, 0, 1],
+        ["Python", 27.21, 0, 0, 2],
+        ["C++", 22.84, 0, 0, 3],
+        ["Golang", 0.4, 0, 0, 9],
+        ["Swift", 2.34, 0, 0, 4],
+        ["Javascript", 17.16, 0, 0, 5],
+        ["PHP", 2.44, 0, 0, 6],
+        ["Java", 17.56, 0, 0, 7],
+        ["C#", 8.22, 0, 0, 8],
+      ],
       resultArray: [
         ["Typescript", 0.2, 0, 0, 0],
         ["Ruby", 1.52, 0, 0, 1],
@@ -24,15 +36,34 @@ class App extends React.Component {
       ],
       bubbleColor: "",
       quickColor: "",
-      sortColor: "",
+      mergeColor: "",
+      onSort: false,
+      buttonColor: "",
     };
   }
 
-  sortColor = e => {
-    this.setState({
-      bgColor: "#f08a5d",
-    });
+  resetSort = e => {
+    let self = this;
+    console.log("on sort reset");
+    if (this.state.onSort === false) {
+      const resultArrayCopy = JSON.parse(
+        JSON.stringify(self.state.resultArrayOriginal)
+      );
+
+      self.setState({
+        resultArray: resultArrayCopy,
+
+        bubbleColor: "",
+        quickColor: "",
+        mergeColor: "",
+      });
+    }
   };
+  // sortColor = e => {
+  //   this.setState({
+  //     bgColor: "#f08a5d",
+  //   });
+  // };
   onSubmit = e => {
     //****BELOW- AXIOS WORKS */
     // e.preventDefault();
@@ -80,344 +111,354 @@ class App extends React.Component {
     //     console.log("resultarray: " + self.state.resultArray[1]);
     // });
     ///***AXIOS , UNCOMMENT LATER */
+    //store it into
   };
 
   bubbleSort = () => {
-    this.setState({
-      bubbleColor: "#f08a5d",
-    });
-    console.log("on bubblesort");
+    //check that no other sorts are selected
+    if (
+      this.state.bubbleColor === "" &&
+      this.state.quickColor === "" &&
+      this.state.mergeColor === "" &&
+      this.state.onSort === false
+    ) {
+      //select the sort, change font color
+      this.setState({
+        bubbleColor: "#f08a5d",
+        onSort: true,
+        buttonColor: "#00587a",
+      });
+      console.log("on bubblesort");
 
-    //variables
-    let self = this;
-    let dataArray = self.state.resultArray;
-    //Count for number of bars
-    let count = 0;
-    //Round for how many times run through entire graph
-    let round = 0;
-    //indicates whether a bar has been swapped during this round
-    let flag = true;
+      //variables
+      let self = this;
+      let dataArray = self.state.resultArray;
+      //Count for number of bars
+      let count = 0;
+      //Round for how many times run through entire graph
+      let round = 0;
+      //indicates whether a bar has been swapped during this round
+      let flag = true;
 
-    //Set the color of first two bars to be yellow
-    dataArray[0][3] = 1;
-    dataArray[1][3] = 1;
+      //Set the color of first two bars to be yellow
+      dataArray[0][3] = 1;
+      dataArray[1][3] = 1;
 
-    //update state, rerender
-    self.setState({
-      resultArray: dataArray,
-    });
+      //update state, rerender
+      self.setState({
+        resultArray: dataArray,
+      });
 
-    let myInterval = setInterval(() => {
-      //Function swaps the bars in the array
-      function swap(input, indexA, indexB) {
-        flag = false;
-        let temp = input[indexA];
-        input[indexA] = input[indexB];
-        input[indexB] = temp;
-        return input;
-      }
-
-      //if at the end of the bar chart
-      if (count === 8) {
-        let dataArray = self.state.resultArray;
-        //if next one is greater, swap
-        if (dataArray[count][1] > dataArray[count + 1][1]) {
-          swap(dataArray, count, count + 1);
-          self.setState({
-            resultArray: dataArray,
-          });
+      let myInterval = setInterval(() => {
+        //Function swaps the bars in the array
+        function swap(input, indexA, indexB) {
+          flag = false;
+          let temp = input[indexA];
+          input[indexA] = input[indexB];
+          input[indexB] = temp;
+          return input;
         }
-        //Update colors
-        dataArray[9 - round][3] = 2;
-        self.setState({
-          resultArray: dataArray,
-        });
-        //Increase the round count
-        round++;
-        //if at the end of the array and no swaps, all items are sorted
-        if (flag === true) {
+
+        //if at the end of the bar chart
+        if (count === 8) {
           let dataArray = self.state.resultArray;
-          //Update each bar color to green
-          dataArray.forEach(element => {
-            element[3] = 2;
-          });
-          self.setState({
-            resultArray: dataArray,
-          });
-          //Clear interval, sorting is complete
-          clearInterval(myInterval);
-        } else {
-          count = 0;
-          flag = true;
-        }
-        return;
-      }
-      // else not at the end of the graph
-      else {
-        let dataArray = self.state.resultArray;
-        //if the item is greater than the next, swap
-        if (dataArray[count][1] > dataArray[count + 1][1]) {
-          swap(dataArray, count, count + 1);
-          //update state
-          self.setState({
-            resultArray: dataArray,
-          });
-        } else {
-          if (dataArray[count + 2][3] !== 2) {
-            //update colors of the bars, and update the state
-            dataArray[count][3] = 0;
-            dataArray[count + 2][3] = 1;
+          //if next one is greater, swap
+          if (dataArray[count][1] > dataArray[count + 1][1]) {
+            swap(dataArray, count, count + 1);
             self.setState({
               resultArray: dataArray,
             });
           }
-          //Increase count at the end of round
-          count++;
+          //Update colors
+          dataArray[9 - round][3] = 2;
+          self.setState({
+            resultArray: dataArray,
+          });
+          //Increase the round count
+          round++;
+          //if at the end of the array and no swaps, all items are sorted
+          if (flag === true) {
+            let dataArray = self.state.resultArray;
+            //Update each bar color to green
+            dataArray.forEach(element => {
+              element[3] = 2;
+            });
+            self.setState({
+              resultArray: dataArray,
+              onSort: false,
+              buttonColor: "#fff",
+            });
+            //Clear interval, sorting is complete
+            clearInterval(myInterval);
+          } else {
+            count = 0;
+            flag = true;
+          }
+          return;
         }
-      }
-    }, 170);
+        // else not at the end of the graph
+        else {
+          let dataArray = self.state.resultArray;
+          //if the item is greater than the next, swap
+          if (dataArray[count][1] > dataArray[count + 1][1]) {
+            swap(dataArray, count, count + 1);
+            //update state
+            self.setState({
+              resultArray: dataArray,
+            });
+          } else {
+            if (dataArray[count + 2][3] !== 2) {
+              //update colors of the bars, and update the state
+              dataArray[count][3] = 0;
+              dataArray[count + 2][3] = 1;
+              self.setState({
+                resultArray: dataArray,
+              });
+            }
+            //Increase count at the end of round
+            count++;
+          }
+        }
+      }, 170);
+    }
   };
 
   quickSort = async () => {
-    this.setState({
-      quickColor: "#f08a5d",
-    });
-    console.log("on quicksort");
-
-    //Varibles
-    let self = this;
-
-    //pause function, slow down
-    //https://stackoverflow.com/questions/951021/what-is-the-javascript-version-of-sleep
-    function sleep(ms) {
-      return new Promise(resolve => setTimeout(resolve, ms));
-    }
-
-    //swap function
-    async function swap(input, indexA, indexB) {
-      await sleep(200);
-      let temp = input[indexA];
-      input[indexA] = input[indexB];
-      input[indexB] = temp;
-
-      return input;
-    }
-
-    //changeColors function, enter index to change color and number of color
-    //updates state with the new bar colors
-    async function changeColors(index, number) {
-      let dataArray = self.state.resultArray;
-      dataArray[index][3] = number;
-      self.setState({
-        resultArray: dataArray,
+    if (
+      this.state.bubbleColor === "" &&
+      this.state.quickColor === "" &&
+      this.state.mergeColor === "" &&
+      this.state.onSort === false
+    ) {
+      this.setState({
+        quickColor: "#f08a5d",
+        onSort: true,
+        buttonColor: "#00587a",
       });
+      console.log("on quicksort");
 
-      await sleep(200);
-    }
+      //Varibles
+      let self = this;
 
-    //resets the color of the bar to blue, updates state
-    async function resetColor(endIndex) {
-      let dataArray = self.state.resultArray;
-      dataArray[endIndex][3] = 0;
-      self.setState({
-        resultArray: dataArray,
-      });
-
-      await sleep(0.1);
-    }
-
-    async function getPivotIndex(array, startIndex, endIndex) {
-      let pivotValue = array[endIndex][1];
-
-      let pivotIndex = startIndex;
-      await changeColors(endIndex, 3);
-
-      for (let i = startIndex; i < endIndex; i++) {
-        let startPivotIndex = pivotIndex;
-
-        //changes bar colors
-        await Promise.all([changeColors(i, 2), changeColors(pivotIndex, 1)]);
-
-        if (array[i][1] < pivotValue) {
-          if (i === pivotIndex) {
-            //if on first index, reset the color and increase pivot index
-
-            await resetColor(i);
-            pivotIndex++;
-          } else {
-            //change colors if not on the first index
-            //change to red
-
-            await Promise.all([
-              changeColors(i, 4),
-              changeColors(pivotIndex, 4),
-            ]);
-            await swap(array, i, pivotIndex);
-
-            //after swap, update colors
-            await Promise.all([
-              changeColors(i, 2),
-              changeColors(pivotIndex, 2),
-            ]);
-
-            //reset the colors after and increase pivot index
-            await Promise.all([resetColor(i), resetColor(pivotIndex)]);
-            pivotIndex++;
-          }
-        }
-
-        //reset colors before returning pivot index
-        if (startPivotIndex !== pivotIndex) {
-          await Promise.all([resetColor(i), resetColor(pivotIndex)]);
-        } else {
-          await resetColor(i);
-        }
+      //pause function, slow down
+      //https://stackoverflow.com/questions/951021/what-is-the-javascript-version-of-sleep
+      function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
       }
 
-      if (pivotIndex !== endIndex) {
-        await Promise.all([
-          changeColors(pivotIndex, 4),
-          changeColors(endIndex, 4),
-        ]);
-        await swap(array, pivotIndex, endIndex);
-        await Promise.all([
-          changeColors(pivotIndex, 4),
-          changeColors(endIndex, 4),
-        ]);
-        await Promise.all([resetColor(pivotIndex), resetColor(endIndex)]);
+      //swap function
+      async function swap(input, indexA, indexB) {
+        await sleep(200);
+        let temp = input[indexA];
+        input[indexA] = input[indexB];
+        input[indexB] = temp;
+
+        return input;
       }
 
-      //return the pivot index
-      return pivotIndex;
-    }
-
-    async function quickSortAlgorithm(array, startingIndex, endingIndex) {
-      if (startingIndex > endingIndex) {
-        return;
-      } else {
-        let index = await getPivotIndex(array, startingIndex, endingIndex);
-
-        await Promise.all([
-          quickSortAlgorithm(array, startingIndex, index - 1),
-          quickSortAlgorithm(array, index + 1, endingIndex),
-        ]);
-      }
-    }
-
-    let dataArray = this.state.resultArray;
-    await quickSortAlgorithm(dataArray, 0, 9).then(async () => {
-      //pause, and then change colors to gree
-      setTimeout(() => {
-        dataArray.forEach((bar, barIndex) => {
-          bar[3] = 2;
-        });
+      //changeColors function, enter index to change color and number of color
+      //updates state with the new bar colors
+      async function changeColors(index, number) {
+        let dataArray = self.state.resultArray;
+        dataArray[index][3] = number;
         self.setState({
           resultArray: dataArray,
         });
-      }, 200);
-    });
+
+        await sleep(200);
+      }
+
+      //resets the color of the bar to blue, updates state
+      async function resetColor(endIndex) {
+        let dataArray = self.state.resultArray;
+        dataArray[endIndex][3] = 0;
+        self.setState({
+          resultArray: dataArray,
+        });
+
+        await sleep(0.1);
+      }
+
+      async function getPivotIndex(array, startIndex, endIndex) {
+        let pivotValue = array[endIndex][1];
+
+        let pivotIndex = startIndex;
+        await changeColors(endIndex, 3);
+
+        for (let i = startIndex; i < endIndex; i++) {
+          let startPivotIndex = pivotIndex;
+
+          //changes bar colors
+          await Promise.all([changeColors(i, 2), changeColors(pivotIndex, 1)]);
+
+          if (array[i][1] < pivotValue) {
+            if (i === pivotIndex) {
+              //if on first index, reset the color and increase pivot index
+
+              await resetColor(i);
+              pivotIndex++;
+            } else {
+              //change colors if not on the first index
+              //change to red
+
+              await Promise.all([
+                changeColors(i, 4),
+                changeColors(pivotIndex, 4),
+              ]);
+              await swap(array, i, pivotIndex);
+
+              //after swap, update colors
+              await Promise.all([
+                changeColors(i, 2),
+                changeColors(pivotIndex, 2),
+              ]);
+
+              //reset the colors after and increase pivot index
+              await Promise.all([resetColor(i), resetColor(pivotIndex)]);
+              pivotIndex++;
+            }
+          }
+
+          //reset colors before returning pivot index
+          if (startPivotIndex !== pivotIndex) {
+            await Promise.all([resetColor(i), resetColor(pivotIndex)]);
+          } else {
+            await resetColor(i);
+          }
+        }
+
+        if (pivotIndex !== endIndex) {
+          await Promise.all([
+            changeColors(pivotIndex, 4),
+            changeColors(endIndex, 4),
+          ]);
+          await swap(array, pivotIndex, endIndex);
+          await Promise.all([
+            changeColors(pivotIndex, 4),
+            changeColors(endIndex, 4),
+          ]);
+          await Promise.all([resetColor(pivotIndex), resetColor(endIndex)]);
+        }
+
+        //return the pivot index
+        return pivotIndex;
+      }
+
+      async function quickSortAlgorithm(array, startingIndex, endingIndex) {
+        if (startingIndex > endingIndex) {
+          return;
+        } else {
+          let index = await getPivotIndex(array, startingIndex, endingIndex);
+
+          await Promise.all([
+            quickSortAlgorithm(array, startingIndex, index - 1),
+            quickSortAlgorithm(array, index + 1, endingIndex),
+          ]);
+        }
+      }
+
+      let dataArray = this.state.resultArray;
+      await quickSortAlgorithm(dataArray, 0, 9).then(async () => {
+        //pause, and then change colors to green
+        setTimeout(() => {
+          dataArray.forEach((bar, barIndex) => {
+            bar[3] = 2;
+          });
+          self.setState({
+            resultArray: dataArray,
+            onSort: false,
+            buttonColor: "#fff",
+          });
+        }, 200);
+      });
+    }
   };
 
   mergeSort = async () => {
-    this.setState({
-      mergeColor: "#f08a5d",
-    });
-    console.log("on mergesort");
-
-    let self = this;
-
-    function sleep(ms) {
-      return new Promise(resolve => setTimeout(resolve, ms));
-    }
-
-    async function changeColors(endIndex, number) {
-      let dataArray = self.state.resultArray;
-      dataArray[endIndex][3] = number;
-      self.setState({
-        resultArray: dataArray,
+    if (
+      this.state.bubbleColor === "" &&
+      this.state.quickColor === "" &&
+      this.state.mergeColor === "" &&
+      this.state.onSort === false
+    ) {
+      this.setState({
+        mergeColor: "#f08a5d",
+        onSort: true,
+        buttonColor: "#00587a",
       });
-      await sleep(200);
-    }
 
-    async function changeSingleColor(item, number) {
-      let dataArray = self.state.resultArray;
+      console.log("on mergesort");
 
-      let index = dataArray.indexOf(item);
-      dataArray[index][3] = number;
+      let self = this;
 
-      self.setState({
-        resultArray: dataArray,
-      });
-      await sleep(500);
-    }
-
-    async function mergeSortAlgorithm(array) {
-      if (array.length <= 1) {
-        return array;
+      function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
       }
-      let middlePoint = Math.floor(array.length / 2),
-        leftArray = await mergeSortAlgorithm(array.slice(0, middlePoint)),
-        rightArray = await mergeSortAlgorithm(array.slice(middlePoint));
 
-      let mergeResult = await merge(leftArray, rightArray);
-
-      return mergeResult;
-    }
-
-    async function merge(arrayA, arrayB) {
-      if (arrayA.length > 0 && arrayB.length > 0) {
-        let arrayAIndex = arrayA[0][0];
-        let lengthTotal = arrayA.length + arrayB.length;
-        let sorted = [];
-
+      async function changeColors(index, number) {
         let dataArray = self.state.resultArray;
-        let dataArrayCopy = dataArray;
-        let indexA = 0;
-        dataArray.forEach((element, index) => {
-          if (element[0] === arrayAIndex) {
-            indexA = index;
-            return;
-          }
+        dataArray[index][3] = number;
+        self.setState({
+          resultArray: dataArray,
+        });
+        await sleep(200);
+      }
+
+      //changes color of one item with unknown index
+      async function changeSingleColor(item, number) {
+        let dataArray = self.state.resultArray;
+
+        //find where the item is in dataArray
+        let index = dataArray.indexOf(item);
+        dataArray[index][3] = number;
+
+        //update state
+        self.setState({
+          resultArray: dataArray,
         });
 
-        await Promise.all([
-          arrayA.forEach((element, index) => {
-            changeSingleColor(element, 1);
-          }),
-        ]);
-        await Promise.all([
-          arrayB.forEach((element, index) => {
-            changeSingleColor(element, 3);
-          }),
-        ]);
+        //pause then return
+        await sleep(200);
+      }
 
-        await sleep(400);
-        while (arrayA.length && arrayB.length) {
-          await Promise.all([
-            changeSingleColor(arrayA[0], 4),
-            changeSingleColor(arrayB[0], 4),
-          ]);
-          if (arrayA[0][1] < arrayB[0][1]) {
-            sorted.push(arrayA.shift());
-          } else {
-            sorted.push(arrayB.shift());
-          }
+      async function mergeSortAlgorithm(array) {
+        //end recursion
+        if (array.length <= 1) {
+          return array;
+        }
 
+        //get midpoint, split into left and right arrays, recursion
+        let middlePoint = Math.floor(array.length / 2),
+          leftArray = await mergeSortAlgorithm(array.slice(0, middlePoint)),
+          rightArray = await mergeSortAlgorithm(array.slice(middlePoint));
+
+        //merge the two arrays
+        let mergeResult = await merge(leftArray, rightArray);
+
+        //return result
+        return mergeResult;
+      }
+
+      //merge arrayA and arrayB
+      async function merge(arrayA, arrayB) {
+        if (arrayA.length > 0 && arrayB.length > 0) {
+          //variables
+          let arrayAIndex = arrayA[0][0];
+          let lengthTotal = arrayA.length + arrayB.length;
+          let sorted = [];
           let dataArray = self.state.resultArray;
           let dataArrayCopy = dataArray;
+          let indexA = 0;
 
-          let resultMergeArray = sorted.concat(
-            arrayA.slice().concat(arrayB.slice())
-          );
-
-          let resultMergeReturn = dataArray
-            .slice(0, indexA)
-            .concat(resultMergeArray)
-            .concat(dataArrayCopy.slice(lengthTotal + indexA, 10));
-          self.setState({
-            resultArray: resultMergeReturn,
+          //identify first where we are in dataArray, set it to be indexA
+          dataArray.forEach((element, index) => {
+            if (element[0] === arrayAIndex) {
+              indexA = index;
+              return;
+            }
           });
 
+          //change the color of arrays so we can identify the left from right, arrayA = yellow, arrayB = purple
           await Promise.all([
             arrayA.forEach((element, index) => {
               changeSingleColor(element, 1);
@@ -428,46 +469,102 @@ class App extends React.Component {
               changeSingleColor(element, 3);
             }),
           ]);
+
+          //pause
+          await sleep(400);
+          while (arrayA.length && arrayB.length) {
+            let dataArray = self.state.resultArray;
+            let dataArrayCopy = dataArray;
+
+            //change the colors of the current bars being compared to red
+            await Promise.all([
+              changeSingleColor(arrayA[0], 4),
+              changeSingleColor(arrayB[0], 4),
+            ]);
+
+            //sort
+            if (arrayA[0][1] < arrayB[0][1]) {
+              sorted.push(arrayA.shift());
+            } else {
+              sorted.push(arrayB.shift());
+            }
+
+            // combine sorted with rest of arrayA and arrayB
+            let resultMergeArray = sorted.concat(
+              arrayA.slice().concat(arrayB.slice())
+            );
+
+            //merge the sorte with the entire dataArray
+            let resultMergeReturn = dataArray
+              .slice(0, indexA)
+              .concat(resultMergeArray)
+              .concat(dataArrayCopy.slice(lengthTotal + indexA, 10));
+
+            //update state to reflect new sort
+            self.setState({
+              resultArray: resultMergeReturn,
+            });
+
+            //change colors for the next loop
+            await Promise.all([
+              arrayA.forEach((element, index) => {
+                changeSingleColor(element, 1);
+              }),
+            ]);
+            await Promise.all([
+              arrayB.forEach((element, index) => {
+                changeSingleColor(element, 3);
+              }),
+            ]);
+          }
+
+          //create new updated array
+          let resultMergeArray = sorted.concat(
+            arrayA.slice().concat(arrayB.slice())
+          );
+
+          //merge updated array with dataArray
+          let resultMergeReturn = dataArray
+            .slice(0, indexA)
+            .concat(resultMergeArray)
+            .concat(dataArrayCopy.slice(lengthTotal + indexA, 10));
+          self.setState({
+            resultArray: resultMergeReturn,
+          });
+
+          //update all colors
+          await Promise.all([
+            arrayA.forEach((element, index) => {
+              changeSingleColor(element, 0);
+            }),
+            arrayB.forEach((element, index) => {
+              changeSingleColor(element, 0);
+            }),
+            sorted.forEach((element, index) => {
+              changeSingleColor(element, 0);
+            }),
+          ]);
+
+          return resultMergeArray;
+        } else {
+          return;
         }
-
-        let resultMergeArray = sorted.concat(
-          arrayA.slice().concat(arrayB.slice())
-        );
-
-        let resultMergeReturn = dataArray
-          .slice(0, indexA)
-          .concat(resultMergeArray)
-          .concat(dataArrayCopy.slice(lengthTotal + indexA, 10));
-        self.setState({
-          resultArray: resultMergeReturn,
-        });
-
-        await Promise.all([
-          arrayA.forEach((element, index) => {
-            changeSingleColor(element, 0);
-          }),
-          arrayB.forEach((element, index) => {
-            changeSingleColor(element, 0);
-          }),
-          sorted.forEach((element, index) => {
-            changeSingleColor(element, 0);
-          }),
-        ]);
-
-        return resultMergeArray;
-      } else {
-        return;
       }
+
+      let dataArray = self.state.resultArray;
+      dataArray = await mergeSortAlgorithm(dataArray);
+
+      //update all bar colors to green at end
+      await Promise.all([
+        dataArray.forEach((element, index) => {
+          changeColors(index, 2);
+        }),
+      ]);
+      self.setState({
+        onSort: false,
+        buttonColor: "#fff",
+      });
     }
-
-    let dataArray = self.state.resultArray;
-    dataArray = await mergeSortAlgorithm(dataArray);
-
-    await Promise.all([
-      dataArray.forEach((element, index) => {
-        changeColors(index, 2);
-      }),
-    ]);
   };
 
   //   handleSubmit(event) {
@@ -533,7 +630,13 @@ class App extends React.Component {
               <br />
               <br />
               <div className="buttonHolder">
-                <button className="btn"> Submit Location </button>
+                <button
+                  className="btn"
+                  style={{ color: this.state.buttonColor }}
+                >
+                  {" "}
+                  Submit Location{" "}
+                </button>
               </div>
             </form>
 
@@ -574,7 +677,13 @@ class App extends React.Component {
             <br />
             <br />
             <div className="buttonHolder">
-              <button className="btn"> Reset Sort</button>
+              <button
+                className="btn"
+                style={{ color: this.state.buttonColor }}
+                onClick={self.resetSort}
+              >
+                Reset Sort
+              </button>
             </div>
           </div>
         </div>
@@ -583,7 +692,7 @@ class App extends React.Component {
           <div className="barGraph">
             {this.state.resultArray.map(function(value, index) {
               const color = [
-                "linear-gradient( #0278ae, #59b5d7)", //blue
+                "linear-gradient( #0278ae, #7aa7c9)", //blue
                 "linear-gradient( #fddb3a, #ffefa0)", //yellow
                 "linear-gradient( #79d70f, #bbd196)", //green
                 "linear-gradient( #5c2a9d, #d789d7)", //purple
