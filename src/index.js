@@ -26,6 +26,16 @@ class App extends React.Component {
         // ["C#", 8.22, 0, 0, 8],
       ],
       resultArray: [
+        // ["Typescript", 90, 0, 0, 0],
+        // ["Ruby", 80, 1, 0, 1],
+        // ["Python", 70, 2, 0, 2],
+        // ["C++", 60, 3, 0, 3],
+        // ["Golang", 50, 4, 0, 9],
+        // ["Swift", 40, 5, 0, 4],
+        // ["Javascript", 30, 6, 0, 5],
+        // ["PHP", 20, 7, 0, 6],
+        // ["Java", 10, 8, 0, 7],
+        // ["C#", 4, 9, 0, 8],
         // ["Typescript", 0.2, 0, 0, 0],
         // ["Ruby", 1.52, 1, 0, 1],
         // ["Python", 27.21, 2, 0, 2],
@@ -43,6 +53,7 @@ class App extends React.Component {
       onSort: false,
       buttonColor: "",
       loading: false,
+      locationSubmited: false,
     };
   }
 
@@ -129,6 +140,7 @@ class App extends React.Component {
                 loading: false,
                 resultArrayOriginal: resultArrayCopy,
                 resultArray: resultArrayFetch,
+                locationSubmitted: true,
               });
 
               //0: (3) ["typescript", "0.20", 0]
@@ -154,7 +166,8 @@ class App extends React.Component {
       this.state.bubbleColor === "" &&
       this.state.quickColor === "" &&
       this.state.mergeColor === "" &&
-      this.state.onSort === false
+      this.state.onSort === false &&
+      this.state.locationSubmitted === true
     ) {
       //select the sort, change font color
       this.setState({
@@ -199,8 +212,13 @@ class App extends React.Component {
             });
           }
           //Update colors
-          dataArray[9 - round][3] = 2;
-          dataArray[9 - round - 1][3] = 0;
+          if (round < 9) {
+            dataArray[9 - round][3] = 2;
+            dataArray[9 - round - 1][3] = 0;
+          } else {
+            dataArray[9 - round][3] = 2;
+          }
+
           self.setState({
             resultArray: dataArray,
           });
@@ -274,7 +292,8 @@ class App extends React.Component {
       this.state.bubbleColor === "" &&
       this.state.quickColor === "" &&
       this.state.mergeColor === "" &&
-      this.state.onSort === false
+      this.state.onSort === false &&
+      this.state.locationSubmitted === true
     ) {
       this.setState({
         quickColor: "#f08a5d",
@@ -425,7 +444,8 @@ class App extends React.Component {
       this.state.bubbleColor === "" &&
       this.state.quickColor === "" &&
       this.state.mergeColor === "" &&
-      this.state.onSort === false
+      this.state.onSort === false &&
+      this.state.locationSubmitted === true
     ) {
       this.setState({
         mergeColor: "#f08a5d",
@@ -642,13 +662,13 @@ class App extends React.Component {
       <div className="container">
         <div className="controls-container">
           <div className="controls">
-            {/* <h1>Job Skills Data Analysis</h1>
+            <h1>Job Skills Data Analysis</h1>
             <p>
               This app analyzes and compares the percentage of job openings for
               several of the most popular programming languages per location.
               Enter a city and state to retrieve the location's data. Next,
               choose a sorting algorithm to visually sort the data!
-            </p> */}
+            </p>
             <br />
             <br />
             <h2>Location</h2>
