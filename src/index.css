@@ -21,10 +21,6 @@
   background: #151525;
 }
 
-.controls p {
-  /* text-align: justify; */
-}
-
 .controls-container {
   /* position: absolute; */
   height: 95%;
@@ -118,6 +114,7 @@
 
 input[type="text"],
 select {
+  -webkit-appearance: none;
   text-align: center;
   width: 100%;
   padding: 3px 5px;
@@ -228,4 +225,8 @@ select {
     #fff,
     rgba(255, 255, 255, 0)
   );
+} */
+
+/* .barGraph {
+  transition: 0.5s ease-in;
 } */

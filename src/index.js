@@ -174,6 +174,7 @@ class App extends React.Component {
       let round = 0;
       //indicates whether a bar has been swapped during this round
       let flag = true;
+      let endFlag = false;
 
       let myInterval = setInterval(() => {
         if (count === 0) {
@@ -188,17 +189,18 @@ class App extends React.Component {
         }
 
         //if at the end of the bar chart
-        if (count === 9) {
+        if (endFlag === true || count === 9) {
           let dataArray = self.state.resultArray;
           //if next one is greater, swap
-          if (dataArray[count - 1][1] > dataArray[count][1]) {
-            swap(dataArray, count - 1, count);
+          if (dataArray[8][1] > dataArray[9][1]) {
+            swap(dataArray, 8, 9);
             self.setState({
               resultArray: dataArray,
             });
           }
           //Update colors
           dataArray[9 - round][3] = 2;
+          dataArray[9 - round - 1][3] = 0;
           self.setState({
             resultArray: dataArray,
           });
@@ -222,6 +224,7 @@ class App extends React.Component {
             count = 0;
             flag = true;
           }
+          endFlag = false;
           return;
         }
         // else not at the end of the graph
@@ -254,13 +257,15 @@ class App extends React.Component {
                 self.setState({
                   resultArray: dataArray,
                 });
+              } else if (dataArray[count + 1][3] === 2) {
+                endFlag = true;
               }
               //Increase count at the end of round
               count++;
             }
           }
         }
-      }, 170);
+      }, 155);
     }
   };
 
