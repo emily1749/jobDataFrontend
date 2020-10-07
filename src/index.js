@@ -54,6 +54,7 @@ class App extends React.Component {
       buttonColor: "",
       loading: false,
       locationSubmited: false,
+      initialData: false,
     };
   }
 
@@ -141,6 +142,7 @@ class App extends React.Component {
                 resultArrayOriginal: resultArrayCopy,
                 resultArray: resultArrayFetch,
                 locationSubmitted: true,
+                initialData: true,
               });
 
               //0: (3) ["typescript", "0.20", 0]
@@ -283,7 +285,7 @@ class App extends React.Component {
             }
           }
         }
-      }, 155);
+      }, 140);
     }
   };
 
@@ -313,7 +315,7 @@ class App extends React.Component {
 
       //swap function
       async function swap(input, indexA, indexB) {
-        await sleep(200);
+        await sleep(170);
         let temp = input[indexA];
         input[indexA] = input[indexB];
         input[indexB] = temp;
@@ -330,7 +332,7 @@ class App extends React.Component {
           resultArray: dataArray,
         });
 
-        await sleep(200);
+        await sleep(170);
       }
 
       //resets the color of the bar to blue, updates state
@@ -434,7 +436,7 @@ class App extends React.Component {
             onSort: false,
             buttonColor: "#fff",
           });
-        }, 200);
+        }, 170);
       });
     }
   };
@@ -467,7 +469,7 @@ class App extends React.Component {
         self.setState({
           resultArray: dataArray,
         });
-        await sleep(200);
+        await sleep(170);
       }
 
       //changes color of one item with unknown index
@@ -484,7 +486,7 @@ class App extends React.Component {
         });
 
         //pause then return
-        await sleep(200);
+        await sleep(170);
       }
 
       async function mergeSortAlgorithm(array) {
@@ -537,7 +539,7 @@ class App extends React.Component {
           ]);
 
           //pause
-          await sleep(400);
+          await sleep(370);
           while (arrayA.length && arrayB.length) {
             let dataArray = self.state.resultArray;
             let dataArrayCopy = dataArray;
@@ -755,6 +757,7 @@ class App extends React.Component {
 
         <div className="barGraph-container">
           <div className="barGraph">
+            {/* {this.state.noData===true  } */}
             {this.state.loading ? <Spinner /> : null}
             {this.state.resultArray.map(function(value, index) {
               const color = [
