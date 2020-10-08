@@ -4,7 +4,9 @@ import React from "react";
 import ReactDOM from "react-dom";
 import axios from "axios";
 import "./index.css";
-import Spinner from "./Spinner";
+
+import Loading from "./components/Loading";
+import BarGraph from "./components/BarGraph";
 
 class App extends React.Component {
   constructor() {
@@ -53,8 +55,11 @@ class App extends React.Component {
       onSort: false,
       buttonColor: "",
       loading: false,
-      locationSubmited: false,
+      locationSubmitted: false,
       initialData: false,
+      message: "Please enter location",
+      // messageError: "Cannot fetch input location, please enter valid location",
+      error: false,
     };
   }
 
@@ -86,79 +91,106 @@ class App extends React.Component {
     });
   };
   onSubmit = e => {
+    // let self= this;
+    e.preventDefault();
+    var self = this;
     if (this.state.onSort === false) {
-      e.preventDefault();
       let resultArrayFetch = [];
       let { city, state } = this.state;
-      city = city.replace(" ", "+");
-      console.log("city: " + city + "State:" + state);
-      var self = this;
-      let totalValue = 0;
-      let count = 0;
+      if (city && state) {
+        city = city.replace(" ", "+");
+        console.log("city: " + city + "State:" + state);
 
-      this.setState(
-        {
-          loading: true,
-        },
-        () => {
-          axios
-            .get(
-              "https://jobskillsapi.emlin.repl.co/jobData/" + city + "/" + state
-            )
-            .then(function(response) {
-              response = response.data;
-              Object.values(response).forEach(function(value) {
-                console.log("value:  " + value);
-                totalValue += value;
-                console.log("totalvalue:" + totalValue);
-              });
-              for (const [key, value] of Object.entries(response)) {
-                console.log(totalValue);
-                let keyResult = key;
-                let percentage = ((value / totalValue) * 100).toFixed(2);
-                if (keyResult === "C%23") {
-                  keyResult = "C#";
+        let totalValue = 0;
+        let count = 0;
+
+        this.setState(
+          {
+            loading: true,
+            bubbleColor: "",
+            quickColor: "",
+            mergeColor: "",
+          },
+          () => {
+            axios
+              .get(
+                // "https://jobskillsapi.emlin.repl.co/jobData/" +
+                "https://jobskillsapi-1.emlin.repl.co/jobData/" +
+                  city +
+                  "/" +
+                  state
+              )
+              .then(function(response) {
+                response = response.data;
+                Object.values(response).forEach(function(value) {
+                  console.log("value:  " + value);
+                  totalValue += value;
+                  console.log("totalvalue:" + totalValue);
+                });
+                for (const [key, value] of Object.entries(response)) {
+                  console.log(totalValue);
+                  let keyResult = key;
+                  let percentage = ((value / totalValue) * 100).toFixed(2);
+                  // if (keyResult === "C%23") {
+                  //   keyResult = "C#";
+                  // }
+                  // if (keyResult === "C%2B%2B") {
+                  //   keyResult = "C++";
+                  // }
+                  resultArrayFetch.push([keyResult, percentage, count]);
+                  count++; //for the key later on
                 }
-                if (keyResult === "C%2B%2B") {
-                  keyResult = "C++";
+                console.log("RESULTFETCH" + resultArrayFetch);
+                if (resultArrayFetch.length < 10 || !resultArrayFetch) {
+                  self.setState({
+                    message:
+                      "Cannot find input location, please enter valid city and state",
+                    loading: false,
+                    error: true,
+                  });
+                } else {
+                  resultArrayFetch.forEach((element, index) => {
+                    let percent = element[1];
+                    element[1] = parseFloat(percent);
+
+                    element.push(0);
+                  });
+                  console.log(resultArrayFetch);
+                  const resultArrayCopy = JSON.parse(
+                    JSON.stringify(resultArrayFetch)
+                  );
+
+                  self.setState({
+                    loading: false,
+                    resultArrayOriginal: resultArrayCopy,
+                    resultArray: resultArrayFetch,
+                    locationSubmitted: true,
+                    initialData: true,
+                    error: false,
+                  });
+
+                  //0: (3) ["typescript", "0.20", 0]
+                  // 1: (3) ["ruby", "1.52", 1]
+                  // 2: (3) ["python", "27.21", 2]
+                  // 3: (3) ["C++", "22.84", 3]
+                  // 4: (3) ["swift", "2.34", 4]
+                  // 5: (3) ["javascript", "17.16", 5]
+                  // 6: (3) ["php", "2.44", 6]
+                  // 7: (3) ["java", "17.56", 7]
+                  // 8: (3) ["C#", "8.22", 8]
+                  console.log("resultarray: " + self.state.resultArray);
+                  console.log("resultarray: " + self.state.resultArray[1]);
                 }
-                resultArrayFetch.push([keyResult, percentage, count]);
-                count++; //for the key later on
-              }
-              console.log(resultArrayFetch);
-              resultArrayFetch.forEach((element, index) => {
-                let percent = element[1];
-                element[1] = parseFloat(percent);
-
-                element.push(0);
               });
-              console.log(resultArrayFetch);
-              const resultArrayCopy = JSON.parse(
-                JSON.stringify(resultArrayFetch)
-              );
-
-              self.setState({
-                loading: false,
-                resultArrayOriginal: resultArrayCopy,
-                resultArray: resultArrayFetch,
-                locationSubmitted: true,
-                initialData: true,
-              });
-
-              //0: (3) ["typescript", "0.20", 0]
-              // 1: (3) ["ruby", "1.52", 1]
-              // 2: (3) ["python", "27.21", 2]
-              // 3: (3) ["C++", "22.84", 3]
-              // 4: (3) ["swift", "2.34", 4]
-              // 5: (3) ["javascript", "17.16", 5]
-              // 6: (3) ["php", "2.44", 6]
-              // 7: (3) ["java", "17.56", 7]
-              // 8: (3) ["C#", "8.22", 8]
-              console.log("resultarray: " + self.state.resultArray);
-              console.log("resultarray: " + self.state.resultArray[1]);
-            });
-        }
-      );
+          }
+        );
+      } else {
+        self.setState({
+          message: "Please enter valid city and state",
+          error: true,
+        });
+        console.log("here");
+      }
     }
   };
 
@@ -251,7 +283,7 @@ class App extends React.Component {
         else {
           let dataArray = self.state.resultArray;
           if (count === 0) {
-            console.log("here" + dataArray);
+            //if first count, have to color first two yellow
             dataArray[0][3] = 1;
             dataArray[1][3] = 1;
             self.setState({
@@ -271,6 +303,7 @@ class App extends React.Component {
             else {
               // if (dataArray[count + 1][3] !== 2)
               if (dataArray[count + 1][3] !== 2) {
+                //if the next one isn't green/sorted, continue
                 //update colors of the bars, and update the state
                 dataArray[count - 1][3] = 0;
                 dataArray[count + 1][3] = 1;
@@ -635,27 +668,6 @@ class App extends React.Component {
     }
   };
 
-  // handleSubmit(event) {
-  //   event.preventDefault();
-  //   // const data = newFormData(event.target);
-  //   const data = event.target;
-  //   console.log(data.get(city));
-  //   // axios
-  //   //   .get(
-  //   //     "https://jobskillsapi.emlin.repl.co/jobData/san+francisco/california"
-  //   //   )
-  //   //   .then(function(response) {
-  //   //     console.log(response.data);
-  //   //     console.log("in axios");
-  //   //   });
-  //   // event.preventDefault("api url", {
-  //   //   method: "GET",
-  //   // body: data
-  //   // });
-  //   //   const data =
-  //   // fetch();
-  // }
-
   render() {
     // console.log("rerendered!");
     const { city, state } = this.state;
@@ -756,34 +768,17 @@ class App extends React.Component {
         </div>
 
         <div className="barGraph-container">
-          <div className="barGraph">
-            {/* {this.state.noData===true  } */}
-            {this.state.loading ? <Spinner /> : null}
-            {this.state.resultArray.map(function(value, index) {
-              const color = [
-                "linear-gradient( #0278ae, #7aa7c9)", //blue
-                "linear-gradient( #fddb3a, #ffefa0)", //yellow
-                "linear-gradient( #79d70f, #bbd196)", //green
-                "linear-gradient( #5c2a9d, #d789d7)", //purple
-                "linear-gradient( #f76a8c, #ffaaa5)", //pink/red
-              ];
-
-              return (
-                <div className="bargroup" key={value[2]}>
-                  <div
-                    className="bar"
-                    style={{
-                      backgroundImage: color[value[3]],
-
-                      height: `${value[1] * 10}px`,
-                    }}
-                  ></div>
-                  <h2>{value[0]}</h2>
-                  <p>{value[1]}%</p>{" "}
-                </div>
-              );
-            })}
-          </div>
+          {this.state.initialData === false ||
+          this.state.error === true ||
+          (this.state.initialData === true && this.state.loading === true) ? (
+            <Loading
+              loading={this.state.loading}
+              message={this.state.message}
+              // messageError={this.state.messageError}
+            />
+          ) : (
+            <BarGraph resultArray={this.state.resultArray} />
+          )}
         </div>
       </div>
     );
