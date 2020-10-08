@@ -1,5 +1,3 @@
-//add extra box with more data
-
 import React from "react";
 import ReactDOM from "react-dom";
 import axios from "axios";
@@ -27,28 +25,7 @@ class App extends React.Component {
         // ["Java", 17.56, 0, 0, 7],
         // ["C#", 8.22, 0, 0, 8],
       ],
-      resultArray: [
-        // ["Typescript", 90, 0, 0, 0],
-        // ["Ruby", 80, 1, 0, 1],
-        // ["Python", 70, 2, 0, 2],
-        // ["C++", 60, 3, 0, 3],
-        // ["Golang", 50, 4, 0, 9],
-        // ["Swift", 40, 5, 0, 4],
-        // ["Javascript", 30, 6, 0, 5],
-        // ["PHP", 20, 7, 0, 6],
-        // ["Java", 10, 8, 0, 7],
-        // ["C#", 4, 9, 0, 8],
-        // ["Typescript", 0.2, 0, 0, 0],
-        // ["Ruby", 1.52, 1, 0, 1],
-        // ["Python", 27.21, 2, 0, 2],
-        // ["C++", 22.84, 3, 0, 3],
-        // ["Golang", 0.4, 4, 0, 9],
-        // ["Swift", 2.34, 5, 0, 4],
-        // ["Javascript", 17.16, 6, 0, 5],
-        // ["PHP", 2.44, 7, 0, 6],
-        // ["Java", 17.56, 8, 0, 7],
-        // ["C#", 8.22, 9, 0, 8],
-      ],
+      resultArray: [],
       bubbleColor: "",
       quickColor: "",
       mergeColor: "",
@@ -58,7 +35,6 @@ class App extends React.Component {
       locationSubmitted: false,
       initialData: false,
       message: "Please enter location",
-      // messageError: "Cannot fetch input location, please enter valid location",
       error: false,
     };
   }
@@ -80,23 +56,20 @@ class App extends React.Component {
       });
     }
   };
-  // sortColor = e => {
-  //   this.setState({
-  //     bgColor: "#f08a5d",
-  //   });
-  // };
+
   onChange = e => {
     this.setState({
       [e.target.name]: e.target.value,
     });
   };
+
   onSubmit = e => {
-    // let self= this;
     e.preventDefault();
     var self = this;
     if (this.state.onSort === false) {
       let resultArrayFetch = [];
       let { city, state } = this.state;
+
       if (city && state) {
         city = city.replace(" ", "+");
         console.log("city: " + city + "State:" + state);
@@ -114,7 +87,6 @@ class App extends React.Component {
           () => {
             axios
               .get(
-                // "https://jobskillsapi.emlin.repl.co/jobData/" +
                 "https://jobskillsapi-1.emlin.repl.co/jobData/" +
                   city +
                   "/" +
@@ -123,24 +95,16 @@ class App extends React.Component {
               .then(function(response) {
                 response = response.data;
                 Object.values(response).forEach(function(value) {
-                  console.log("value:  " + value);
                   totalValue += value;
-                  console.log("totalvalue:" + totalValue);
                 });
                 for (const [key, value] of Object.entries(response)) {
-                  console.log(totalValue);
                   let keyResult = key;
                   let percentage = ((value / totalValue) * 100).toFixed(2);
-                  // if (keyResult === "C%23") {
-                  //   keyResult = "C#";
-                  // }
-                  // if (keyResult === "C%2B%2B") {
-                  //   keyResult = "C++";
-                  // }
+
+                  //push count to later use as key
                   resultArrayFetch.push([keyResult, percentage, count]);
-                  count++; //for the key later on
+                  count++;
                 }
-                console.log("RESULTFETCH" + resultArrayFetch);
                 if (resultArrayFetch.length < 10 || !resultArrayFetch) {
                   self.setState({
                     message:
@@ -153,9 +117,9 @@ class App extends React.Component {
                     let percent = element[1];
                     element[1] = parseFloat(percent);
 
+                    //push 0 to every element, later will use to update color of bar during sort
                     element.push(0);
                   });
-                  console.log(resultArrayFetch);
                   const resultArrayCopy = JSON.parse(
                     JSON.stringify(resultArrayFetch)
                   );
@@ -168,9 +132,6 @@ class App extends React.Component {
                     initialData: true,
                     error: false,
                   });
-
-                  console.log("resultarray: " + self.state.resultArray);
-                  console.log("resultarray: " + self.state.resultArray[1]);
                 }
               });
           }
@@ -180,13 +141,11 @@ class App extends React.Component {
           message: "Please enter valid city and state",
           error: true,
         });
-        console.log("here");
       }
     }
   };
 
   bubbleSort = () => {
-    //check that no other sorts are selected
     if (
       this.state.bubbleColor === "" &&
       this.state.quickColor === "" &&
@@ -194,7 +153,6 @@ class App extends React.Component {
       this.state.onSort === false &&
       this.state.locationSubmitted === true
     ) {
-      //select the sort, change font color
       this.setState({
         bubbleColor: "#f08a5d",
         onSort: true,
@@ -203,21 +161,16 @@ class App extends React.Component {
 
       console.log("on bubblesort");
 
-      //variables
       let self = this;
-      // let dataArray = self.state.resultArray;
-      //Count for number of bars
       let count = 0;
-      //Round for how many times run through entire graph
       let round = 0;
-      //indicates whether a bar has been swapped during this round
+      //flag indicates whether a bar has been swapped during this round
       let flag = true;
       let endFlag = false;
 
       let myInterval = setInterval(() => {
         if (count === 0) {
         }
-        //Function swaps the bars in the array
         function swap(input, indexA, indexB) {
           flag = false;
           let temp = input[indexA];
@@ -226,17 +179,15 @@ class App extends React.Component {
           return input;
         }
 
-        //if at the end of the bar chart
         if (endFlag === true || count === 9) {
           let dataArray = self.state.resultArray;
-          //if next one is greater, swap
           if (dataArray[8][1] > dataArray[9][1]) {
             swap(dataArray, 8, 9);
             self.setState({
               resultArray: dataArray,
             });
           }
-          //Update colors
+
           if (round < 9) {
             dataArray[9 - round][3] = 2;
             dataArray[9 - round - 1][3] = 0;
@@ -247,7 +198,6 @@ class App extends React.Component {
           self.setState({
             resultArray: dataArray,
           });
-          //Increase the round count
           round++;
           //if at the end of the array and no swaps, all items are sorted
           if (flag === true) {
@@ -261,7 +211,6 @@ class App extends React.Component {
               onSort: false,
               buttonColor: "#fff",
             });
-            //Clear interval, sorting is complete
             clearInterval(myInterval);
           } else {
             count = 0;
@@ -269,9 +218,7 @@ class App extends React.Component {
           }
           endFlag = false;
           return;
-        }
-        // else not at the end of the graph
-        else {
+        } else {
           let dataArray = self.state.resultArray;
           if (count === 0) {
             //if first count, have to color first two yellow
@@ -282,20 +229,14 @@ class App extends React.Component {
             });
             count++;
           } else {
-            //if the item is greater than the next, swap
             if (dataArray[count - 1][1] > dataArray[count][1]) {
               swap(dataArray, count - 1, count);
-              //update state
               self.setState({
                 resultArray: dataArray,
               });
-            }
-            // } else if ((count === 1 && dataArray[0][3] = 1)) {
-            else {
-              // if (dataArray[count + 1][3] !== 2)
+            } else {
               if (dataArray[count + 1][3] !== 2) {
-                //if the next one isn't green/sorted, continue
-                //update colors of the bars, and update the state
+                //if the next one isn't green/already sorted, continue
                 dataArray[count - 1][3] = 0;
                 dataArray[count + 1][3] = 1;
                 self.setState({
@@ -304,7 +245,6 @@ class App extends React.Component {
               } else if (dataArray[count + 1][3] === 2) {
                 endFlag = true;
               }
-              //Increase count at the end of round
               count++;
             }
           }
@@ -328,7 +268,6 @@ class App extends React.Component {
       });
       console.log("on quicksort");
 
-      //Varibles
       let self = this;
 
       //pause function, slow down
@@ -337,7 +276,6 @@ class App extends React.Component {
         return new Promise(resolve => setTimeout(resolve, ms));
       }
 
-      //swap function
       async function swap(input, indexA, indexB) {
         await sleep(170);
         let temp = input[indexA];
@@ -496,7 +434,6 @@ class App extends React.Component {
         await sleep(170);
       }
 
-      //changes color of one item with unknown index
       async function changeSingleColor(item, number) {
         let dataArray = self.state.resultArray;
 
@@ -504,37 +441,29 @@ class App extends React.Component {
         let index = dataArray.indexOf(item);
         dataArray[index][3] = number;
 
-        //update state
         self.setState({
           resultArray: dataArray,
         });
 
-        //pause then return
         await sleep(170);
       }
 
       async function mergeSortAlgorithm(array) {
-        //end recursion
         if (array.length <= 1) {
           return array;
         }
 
-        //get midpoint, split into left and right arrays, recursion
         let middlePoint = Math.floor(array.length / 2),
           leftArray = await mergeSortAlgorithm(array.slice(0, middlePoint)),
           rightArray = await mergeSortAlgorithm(array.slice(middlePoint));
 
-        //merge the two arrays
         let mergeResult = await merge(leftArray, rightArray);
 
-        //return result
         return mergeResult;
       }
 
-      //merge arrayA and arrayB
       async function merge(arrayA, arrayB) {
         if (arrayA.length > 0 && arrayB.length > 0) {
-          //variables
           let arrayAIndex = arrayA[0][0];
           let lengthTotal = arrayA.length + arrayB.length;
           let sorted = [];
@@ -550,7 +479,8 @@ class App extends React.Component {
             }
           });
 
-          //change the color of arrays so we can identify the left from right, arrayA = yellow, arrayB = purple
+          //change the color of arrays so we can identify the left from right
+          //arrayA = yellow, arrayB = purple
           await Promise.all([
             arrayA.forEach((element, index) => {
               changeSingleColor(element, 1);
@@ -562,26 +492,22 @@ class App extends React.Component {
             }),
           ]);
 
-          //pause
           await sleep(370);
           while (arrayA.length && arrayB.length) {
             let dataArray = self.state.resultArray;
             let dataArrayCopy = dataArray;
 
-            //change the colors of the current bars being compared to red
             await Promise.all([
               changeSingleColor(arrayA[0], 4),
               changeSingleColor(arrayB[0], 4),
             ]);
 
-            //sort
             if (arrayA[0][1] < arrayB[0][1]) {
               sorted.push(arrayA.shift());
             } else {
               sorted.push(arrayB.shift());
             }
 
-            // combine sorted with rest of arrayA and arrayB
             let resultMergeArray = sorted.concat(
               arrayA.slice().concat(arrayB.slice())
             );
@@ -592,7 +518,6 @@ class App extends React.Component {
               .concat(resultMergeArray)
               .concat(dataArrayCopy.slice(lengthTotal + indexA, 10));
 
-            //update state to reflect new sort
             self.setState({
               resultArray: resultMergeReturn,
             });
@@ -615,7 +540,6 @@ class App extends React.Component {
             arrayA.slice().concat(arrayB.slice())
           );
 
-          //merge updated array with dataArray
           let resultMergeReturn = dataArray
             .slice(0, indexA)
             .concat(resultMergeArray)
@@ -624,7 +548,6 @@ class App extends React.Component {
             resultArray: resultMergeReturn,
           });
 
-          //update all colors
           await Promise.all([
             arrayA.forEach((element, index) => {
               changeSingleColor(element, 0);
@@ -660,7 +583,6 @@ class App extends React.Component {
   };
 
   render() {
-    // console.log("rerendered!");
     const { city, state } = this.state;
     var self = this;
     return (
