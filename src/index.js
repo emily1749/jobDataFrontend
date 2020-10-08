@@ -169,15 +169,6 @@ class App extends React.Component {
                     error: false,
                   });
 
-                  //0: (3) ["typescript", "0.20", 0]
-                  // 1: (3) ["ruby", "1.52", 1]
-                  // 2: (3) ["python", "27.21", 2]
-                  // 3: (3) ["C++", "22.84", 3]
-                  // 4: (3) ["swift", "2.34", 4]
-                  // 5: (3) ["javascript", "17.16", 5]
-                  // 6: (3) ["php", "2.44", 6]
-                  // 7: (3) ["java", "17.56", 7]
-                  // 8: (3) ["C#", "8.22", 8]
                   console.log("resultarray: " + self.state.resultArray);
                   console.log("resultarray: " + self.state.resultArray[1]);
                 }
@@ -214,7 +205,7 @@ class App extends React.Component {
 
       //variables
       let self = this;
-      let dataArray = self.state.resultArray;
+      // let dataArray = self.state.resultArray;
       //Count for number of bars
       let count = 0;
       //Round for how many times run through entire graph
@@ -774,7 +765,6 @@ class App extends React.Component {
             <Loading
               loading={this.state.loading}
               message={this.state.message}
-              // messageError={this.state.messageError}
             />
           ) : (
             <BarGraph resultArray={this.state.resultArray} />

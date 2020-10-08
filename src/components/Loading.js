@@ -2,30 +2,22 @@ import "./Loading.css";
 import React from "react";
 
 const Loading = props => {
-  let displayMsg = [
-    "Please enter location",
-    "Please enter both City and State",
-  ];
   return (
     <div>
       {props.loading ? (
-        <div class="lds-ellipsis">
+        <div className="lds-ellipsis">
           <div></div>
           <div></div>
           <div></div>
           <div></div>
         </div>
       ) : (
-        <div class="info">
+        <div className="info">
           <p>{props.message}</p>
         </div>
       )}
     </div>
   );
 };
-
-// Loading.defaultProps = {
-//   message: "Please enter location",
-// };
 
 export default Loading;
