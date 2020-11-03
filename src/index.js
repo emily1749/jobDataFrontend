@@ -1,47 +1,36 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import axios from "axios";
-import "./index.css";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import axios from 'axios';
+import './index.css';
 
-import Loading from "./components/Loading";
-import BarGraph from "./components/BarGraph";
+import Loading from './components/Loading';
+import BarGraph from './components/BarGraph';
 
 class App extends React.Component {
   constructor() {
     super();
 
     this.state = {
-      city: "",
-      state: "",
-      resultArrayOriginal: [
-        // ["Typescript", 0.2, 0, 0, 0],
-        // ["Ruby", 1.52, 0, 0, 1],
-        // ["Python", 27.21, 0, 0, 2],
-        // ["C++", 22.84, 0, 0, 3],
-        // ["Golang", 0.4, 0, 0, 9],
-        // ["Swift", 2.34, 0, 0, 4],
-        // ["Javascript", 17.16, 0, 0, 5],
-        // ["PHP", 2.44, 0, 0, 6],
-        // ["Java", 17.56, 0, 0, 7],
-        // ["C#", 8.22, 0, 0, 8],
-      ],
+      city: '',
+      state: '',
+      resultArrayOriginal: [],
       resultArray: [],
-      bubbleColor: "",
-      quickColor: "",
-      mergeColor: "",
+      bubbleColor: '',
+      quickColor: '',
+      mergeColor: '',
       onSort: false,
-      buttonColor: "",
+      buttonColor: '',
       loading: false,
       locationSubmitted: false,
       initialData: false,
-      message: "Please enter location",
+      message: 'Please enter location',
       error: false,
     };
   }
 
   resetSort = e => {
     let self = this;
-    console.log("on sort reset");
+    console.log('on sort reset');
     if (this.state.onSort === false) {
       const resultArrayCopy = JSON.parse(
         JSON.stringify(self.state.resultArrayOriginal)
@@ -50,9 +39,9 @@ class App extends React.Component {
       self.setState({
         resultArray: resultArrayCopy,
 
-        bubbleColor: "",
-        quickColor: "",
-        mergeColor: "",
+        bubbleColor: '',
+        quickColor: '',
+        mergeColor: '',
       });
     }
   };
@@ -71,8 +60,8 @@ class App extends React.Component {
       let { city, state } = this.state;
 
       if (city && state) {
-        city = city.replace(" ", "+");
-        console.log("city: " + city + "State:" + state);
+        city = city.replace(' ', '+');
+        console.log('city: ' + city + 'State:' + state);
 
         let totalValue = 0;
         let count = 0;
@@ -80,16 +69,16 @@ class App extends React.Component {
         this.setState(
           {
             loading: true,
-            bubbleColor: "",
-            quickColor: "",
-            mergeColor: "",
+            bubbleColor: '',
+            quickColor: '',
+            mergeColor: '',
           },
           () => {
             axios
               .get(
-                "https://jobskillsapi-1.emlin.repl.co/jobData/" +
+                'http://jobdataapi.emlin.repl.co/jobSkillsData/' +
                   city +
-                  "/" +
+                  '/' +
                   state
               )
               .then(function(response) {
@@ -108,7 +97,7 @@ class App extends React.Component {
                 if (resultArrayFetch.length < 10 || !resultArrayFetch) {
                   self.setState({
                     message:
-                      "Cannot find input location, please enter valid city and state",
+                      'Cannot find data for input location, please enter valid city and state',
                     loading: false,
                     error: true,
                   });
@@ -138,7 +127,7 @@ class App extends React.Component {
         );
       } else {
         self.setState({
-          message: "Please enter valid city and state",
+          message: 'Please enter valid city and state',
           error: true,
         });
       }
@@ -147,19 +136,19 @@ class App extends React.Component {
 
   bubbleSort = () => {
     if (
-      this.state.bubbleColor === "" &&
-      this.state.quickColor === "" &&
-      this.state.mergeColor === "" &&
+      this.state.bubbleColor === '' &&
+      this.state.quickColor === '' &&
+      this.state.mergeColor === '' &&
       this.state.onSort === false &&
       this.state.locationSubmitted === true
     ) {
       this.setState({
-        bubbleColor: "#f08a5d",
+        bubbleColor: '#f08a5d',
         onSort: true,
-        buttonColor: "#00587a",
+        buttonColor: '#00587a',
       });
 
-      console.log("on bubblesort");
+      console.log('on bubblesort');
 
       let self = this;
       let count = 0;
@@ -209,7 +198,7 @@ class App extends React.Component {
             self.setState({
               resultArray: dataArray,
               onSort: false,
-              buttonColor: "#fff",
+              buttonColor: '#fff',
             });
             clearInterval(myInterval);
           } else {
@@ -255,22 +244,21 @@ class App extends React.Component {
 
   quickSort = async () => {
     if (
-      this.state.bubbleColor === "" &&
-      this.state.quickColor === "" &&
-      this.state.mergeColor === "" &&
+      this.state.bubbleColor === '' &&
+      this.state.quickColor === '' &&
+      this.state.mergeColor === '' &&
       this.state.onSort === false &&
       this.state.locationSubmitted === true
     ) {
       this.setState({
-        quickColor: "#f08a5d",
+        quickColor: '#f08a5d',
         onSort: true,
-        buttonColor: "#00587a",
+        buttonColor: '#00587a',
       });
-      console.log("on quicksort");
+      console.log('on quicksort');
 
       let self = this;
 
-      //pause function, slow down
       //https://stackoverflow.com/questions/951021/what-is-the-javascript-version-of-sleep
       function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
@@ -396,7 +384,7 @@ class App extends React.Component {
           self.setState({
             resultArray: dataArray,
             onSort: false,
-            buttonColor: "#fff",
+            buttonColor: '#fff',
           });
         }, 170);
       });
@@ -405,19 +393,19 @@ class App extends React.Component {
 
   mergeSort = async () => {
     if (
-      this.state.bubbleColor === "" &&
-      this.state.quickColor === "" &&
-      this.state.mergeColor === "" &&
+      this.state.bubbleColor === '' &&
+      this.state.quickColor === '' &&
+      this.state.mergeColor === '' &&
       this.state.onSort === false &&
       this.state.locationSubmitted === true
     ) {
       this.setState({
-        mergeColor: "#f08a5d",
+        mergeColor: '#f08a5d',
         onSort: true,
-        buttonColor: "#00587a",
+        buttonColor: '#00587a',
       });
 
-      console.log("on mergesort");
+      console.log('on mergesort');
 
       let self = this;
 
@@ -577,7 +565,7 @@ class App extends React.Component {
       ]);
       self.setState({
         onSort: false,
-        buttonColor: "#fff",
+        buttonColor: '#fff',
       });
     }
   };
@@ -586,101 +574,114 @@ class App extends React.Component {
     const { city, state } = this.state;
     var self = this;
     return (
-      <div className="container">
-        <div className="controls-container">
-          <div className="controls">
-            <h1>Job Skills Data Analysis</h1>
-            <p>
-              This app analyzes and compares the percentage of job openings for
-              several of the most popular programming languages per location.
-              Enter a city and state to retrieve the location's data. Next,
-              choose a sorting algorithm to visually sort the data!
-            </p>
-            <br />
-            <br />
-            <h2>Location</h2>
+      <div className='container'>
+        <div className='controls-container'>
+          <div className='controls'>
+            <div className='info-container'>
+              <h1>Job Skills Data Analysis</h1>
+              <p>
+                This app analyzes and compares the percentage of job openings
+                for several of the most popular programming languages per
+                location. Enter a city and state to retrieve the location's
+                data. Next, choose a sorting algorithm to visually sort the
+                data!
+              </p>
+            </div>
 
-            <form onSubmit={this.onSubmit}>
-              <label>City:</label>
+            <div>
+              <div>
+                <h2>Location</h2>
+              </div>
 
-              <input
-                type="text"
-                name="city"
-                className="input-text"
-                value={city}
-                onChange={this.onChange}
-              />
-              <br />
-              <label>State:</label>
+              <form onSubmit={this.onSubmit}>
+                <div className='location-container'>
+                  <div>
+                    <label>City:</label>
 
-              <input
-                type="text"
-                name="state"
-                className="input-text"
-                value={state}
-                onChange={this.onChange}
-              />
-              <br />
-              <br />
-              <div className="buttonHolder">
+                    <input
+                      type='text'
+                      name='city'
+                      className='input-text'
+                      value={city}
+                      onChange={this.onChange}
+                    />
+                  </div>
+
+                  {/* <br /> */}
+                  <div>
+                    <label>State:</label>
+
+                    <input
+                      type='text'
+                      name='state'
+                      className='input-text'
+                      value={state}
+                      onChange={this.onChange}
+                    />
+                  </div>
+
+                  <div>
+                    <div className='buttonHolder'>
+                      <button
+                        className='btn'
+                        style={{ color: this.state.buttonColor }}
+                      >
+                        Submit Location
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+
+            <div className='algorithms-container'>
+              <div>
+                <h2>Sorting Algorithm</h2>
+              </div>
+              <div>
                 <button
-                  className="btn"
-                  style={{ color: this.state.buttonColor }}
+                  onClick={self.bubbleSort}
+                  className='sortingAlgorithm'
+                  style={{ color: this.state.bubbleColor }}
                 >
-                  Submit Location
+                  Bubble Sort
                 </button>
               </div>
-            </form>
 
-            <br />
-            <br />
-            <h2>Sorting Algorithm</h2>
+              <div>
+                <button
+                  onClick={self.quickSort}
+                  className='sortingAlgorithm'
+                  style={{ color: this.state.quickColor }}
+                >
+                  Quick Sort
+                </button>
+              </div>
 
-            <button
-              onClick={self.bubbleSort}
-              className="sortingAlgorithm"
-              style={{ color: this.state.bubbleColor }}
-            >
-              Bubble Sort
-              <span></span>
-              <span></span>
-            </button>
+              <div>
+                <button
+                  onClick={self.mergeSort}
+                  className='sortingAlgorithm'
+                  style={{ color: this.state.mergeColor }}
+                >
+                  Merge Sort
+                </button>
+              </div>
 
-            <br />
-            <button
-              onClick={self.quickSort}
-              className="sortingAlgorithm"
-              style={{ color: this.state.quickColor }}
-            >
-              Quick Sort
-              <span></span>
-              <span></span>
-            </button>
-            <br />
-            <button
-              onClick={self.mergeSort}
-              className="sortingAlgorithm"
-              style={{ color: this.state.mergeColor }}
-            >
-              Merge Sort
-              <span></span>
-              <span></span>
-            </button>
-            <br />
-            <br />
-            <div className="buttonHolder">
-              <button
-                className="btn"
-                style={{ color: this.state.buttonColor }}
-                onClick={self.resetSort}
-              >
-                Reset Sort
-              </button>
+              <div className='buttonHolder'>
+                <button
+                  className='btn'
+                  style={{ color: this.state.buttonColor }}
+                  onClick={self.resetSort}
+                >
+                  Reset Sort
+                </button>
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="barGraph-container">
+        <div className='barGraph-container'>
           {this.state.initialData === false ||
           this.state.error === true ||
           (this.state.initialData === true && this.state.loading === true) ? (
@@ -697,4 +698,4 @@ class App extends React.Component {
   }
 }
 
-ReactDOM.render(<App />, document.querySelector("#root"));
+ReactDOM.render(<App />, document.querySelector('#root'));
