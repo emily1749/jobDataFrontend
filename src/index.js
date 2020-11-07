@@ -91,6 +91,7 @@ class App extends React.Component {
                   let percentage = ((value / totalValue) * 100).toFixed(2);
 
                   //push count to later use as key
+
                   resultArrayFetch.push([keyResult, percentage, count]);
                   count++;
                 }
@@ -154,6 +155,7 @@ class App extends React.Component {
       let count = 0;
       let round = 0;
       //flag indicates whether a bar has been swapped during this round
+
       let flag = true;
       let endFlag = false;
 
@@ -511,6 +513,7 @@ class App extends React.Component {
             });
 
             //change colors for the next loop
+
             await Promise.all([
               arrayA.forEach((element, index) => {
                 changeSingleColor(element, 1);
