@@ -4,3 +4,10 @@ export const onSort = boolean => {
     payload: boolean,
   };
 };
+
+export const updateResultArray = arr => {
+  return {
+    type: 'RESULT_ARRAY',
+    payload: arr,
+  };
+};

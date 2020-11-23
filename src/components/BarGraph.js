@@ -1,10 +1,12 @@
 import React from 'react';
 import './index.css';
+import { connect } from 'react-redux';
+import { updateResultArray } from '../actions';
 
-const BarGraph = props => {
+const BarGraph = ({ resultArray }) => {
   return (
     <div className='barGraph'>
-      {props.resultArray.map(function(value, index) {
+      {resultArray.map(function(value, index) {
         const color = [
           'linear-gradient( #0278ae, #7aa7c9)', //blue
           'linear-gradient( #fddb3a, #ffefa0)', //yellow
@@ -32,4 +34,8 @@ const BarGraph = props => {
   );
 };
 
-export default BarGraph;
+const mapStateToProps = state => {
+  return { resultArray: state.resultArray };
+};
+
+export default connect(mapStateToProps, { updateResultArray })(BarGraph);
