@@ -15,7 +15,7 @@ export default (
 ) => {
   switch (action.type) {
     case 'RESULT_ARRAY':
-      return [...action.payload];
+      return action.payload;
     default:
       return state;
   }

@@ -1,5 +1,6 @@
 import React from 'react';
 import BubbleSort from './sortingAlgorithms/BubbleSort';
+import MergeSort from './sortingAlgorithms/MergeSort';
 
 const Controls = () => {
   return (
@@ -64,17 +65,18 @@ const Controls = () => {
           <BubbleSort />
         </div>
 
-        {/* <div>
-          <button
+        <div>
+          <MergeSort />
+          {/* <button
             onClick={self.quickSort}
             className='sortingAlgorithm'
             style={{ color: this.state.quickColor }}
           >
             Quick Sort
-          </button>
+          </button> */}
         </div>
 
-        <div>
+        {/* <div>
           <button
             onClick={self.mergeSort}
             className='sortingAlgorithm'
