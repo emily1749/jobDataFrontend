@@ -52,6 +52,7 @@ class App extends React.Component {
   }
 
   render() {
+    console.log('APP RERENDERED');
     // const { city, state } = this.state;
     // var self = this;
     return (

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { updateResultArray } from '../actions';
 
 const BarGraph = ({ resultArray }) => {
+  console.log('BAR GRAPH RERENDERD');
   return (
     <div className='barGraph'>
       {resultArray.map(function(value, index) {

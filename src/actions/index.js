@@ -8,6 +8,6 @@ export const onSort = boolean => {
 export const updateResultArray = arr => {
   return {
     type: 'RESULT_ARRAY',
-    payload: arr,
+    payload: [...arr],
   };
 };
