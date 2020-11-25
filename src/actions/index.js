@@ -1,3 +1,11 @@
+import jobData from '../apis/jobData';
+
+export const fetchJobData = (city, state) => async dispatch => {
+  const response = await jobData.get(`${city}/${state}`);
+
+  dispatch({ type: 'FETCH_JOB_DATA', payload: response });
+};
+
 export const setOnSort = boolean => {
   return {
     type: 'ON_SORT',
@@ -23,5 +31,19 @@ export const updateMergeStart = boolean => {
   return {
     type: 'MERGE_START',
     payload: boolean,
+  };
+};
+
+export const updateCityLocation = cityLocation => {
+  return {
+    type: 'CITY_LOCATION',
+    payload: cityLocation,
+  };
+};
+
+export const updateStateLocation = stateLocation => {
+  return {
+    type: 'STATE_LOCATION',
+    payload: stateLocation,
   };
 };

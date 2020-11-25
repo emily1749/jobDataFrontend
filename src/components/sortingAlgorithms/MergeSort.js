@@ -7,6 +7,8 @@ const MergeSort = props => {
     if (props.mergeStart === true && props.onSort === false) {
       props.setOnSort(true);
       const mergeSortStartAlgorithm = async () => {
+        let dataArray = [...props.resultArray];
+
         console.log('on mergesort');
 
         let self = this;
@@ -16,9 +18,8 @@ const MergeSort = props => {
         }
 
         async function changeColors(index, number) {
-          let dataArray = [...props.resultArray];
           dataArray[index][3] = number;
-          props.updateResultArray(dataArray);
+          // props.updateResultArray(dataArray);
 
           //   props.updateResultArray([
           //     ['Swift', 2.34, 5, 0, 4],
@@ -33,17 +34,17 @@ const MergeSort = props => {
           //     ['Golang', 0.4, 4, 0, 9],
           //   ]);
 
-          await sleep(170);
+          // await sleep(170);
         }
 
         async function changeSingleColor(item, number) {
-          let dataArray = [...props.resultArray];
+          // let dataArray = [...props.resultArray];
 
           //find where the item is in dataArray
           let index = dataArray.indexOf(item);
           dataArray[index][3] = number;
 
-          props.updateResultArray(dataArray);
+          // props.updateResultArray(dataArray);
 
           // props.updateResultArray([
           //   ['Swift', 2.34, 5, 0, 4],
@@ -58,14 +59,14 @@ const MergeSort = props => {
           //   ['Golang', 0.4, 4, 0, 9],
           // ]);
 
-          await sleep(170);
+          // await sleep(170);
         }
 
         async function updateArray(arr) {
           //   props.updateResultArray(arr);
           console.log('IN UPDATE FUNCTION');
           props.updateResultArray(arr);
-          await sleep(50);
+          await sleep(500);
           //   props.updateResultArray([
           //     ['Swift', 2.34, 5, 0, 4],
           //     ['Javascript', 17.16, 6, 0, 5],
@@ -79,15 +80,16 @@ const MergeSort = props => {
           //     ['Golang', 0.4, 4, 0, 9],
           //   ]);
         }
-
+        let firstHalf = [];
         async function mergeSortAlgorithm(array) {
           if (array.length <= 1) {
             return array;
           }
+          // let test = [...firstHalf, array.slice(middlePoint)];
 
-          let middlePoint = Math.floor(array.length / 2),
-            leftArray = await mergeSortAlgorithm(array.slice(0, middlePoint)),
-            rightArray = await mergeSortAlgorithm(array.slice(middlePoint));
+          let middlePoint = Math.floor(array.length / 2);
+          let leftArray = await mergeSortAlgorithm(array.slice(0, middlePoint));
+          let rightArray = await mergeSortAlgorithm(array.slice(middlePoint));
 
           let mergeResult = await merge(leftArray, rightArray);
           console.log('MERGESULT' + mergeResult);
@@ -100,7 +102,7 @@ const MergeSort = props => {
             let arrayAIndex = arrayA[0][0];
             let lengthTotal = arrayA.length + arrayB.length;
             let sorted = [];
-            let dataArray = [...props.resultArray];
+            // let dataArray = [...props.resultArray];
             let dataArrayCopy = [...dataArray];
             let indexA = 0;
 
@@ -108,7 +110,16 @@ const MergeSort = props => {
             dataArray.forEach((element, index) => {
               if (element[0] === arrayAIndex) {
                 indexA = index;
-                return;
+                console.log('RETURNED!!!' + arrayA);
+                console.log('RETURNED!! B' + arrayB);
+                if (arrayA.length + arrayB.length === 5) {
+                  console.log('LENGTH 5!!!!!!!!!!!' + [...arrayA, ...arrayB]);
+                  updateArray([...arrayA, ...arrayB]);
+                  firstHalf = [...arrayA, ...arrayB];
+                  return [...arrayA, ...arrayB];
+                } else {
+                  return;
+                }
               }
             });
 
@@ -124,11 +135,10 @@ const MergeSort = props => {
                 changeSingleColor(element, 3);
               }),
             ]);
-
-            await sleep(370);
+            // await sleep(370);
             while (arrayA.length && arrayB.length) {
-              let dataArray = [...props.resultArray];
-              let dataArrayCopy = [...dataArray];
+              // let dataArray = [...props.resultArray];
+              // let dataArrayCopy = [...dataArray];
 
               await Promise.all([
                 changeSingleColor(arrayA[0], 4),
@@ -205,6 +215,7 @@ const MergeSort = props => {
                 changeSingleColor(element, 0);
               }),
             ]);
+            // updateArray(dataArray);
 
             return resultMergeArray;
           } else {
@@ -212,7 +223,7 @@ const MergeSort = props => {
           }
         }
 
-        let dataArray = [...props.resultArray];
+        // let dataArray = [...props.resultArray];
         dataArray = await mergeSortAlgorithm(dataArray);
         console.log('DATAARRAY' + dataArray);
         //update all bar colors to green at end

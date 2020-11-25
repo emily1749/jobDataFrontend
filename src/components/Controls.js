@@ -1,8 +1,58 @@
 import React from 'react';
+// import axios from 'axios';
+import { connect } from 'react-redux';
+import {
+  onSort,
+  fetchJobData,
+  updateCityLocation,
+  updateStateLocation,
+} from '../actions';
 import BubbleSort from './sortingAlgorithms/BubbleSort';
 import MergeSort from './sortingAlgorithms/MergeSort';
 
-const Controls = () => {
+const Controls = props => {
+  const city = props.cityLocation;
+  const state = props.stateLocation;
+  const onCityInputChange = e => {
+    props.updateCityLocation(e.target.value);
+    // this.setState({
+    //   [e.target.name]: e.target.value,
+    // });
+  };
+  const onStateInputChange = e => {
+    props.updateStateLocation(e.target.value);
+    console.log(props.cityLocation);
+  };
+  const onFormSubmit = e => {
+    e.preventDefault();
+    // var self = this;
+    // if (props.onSort === false) {
+    let resultArrayFetch = [];
+    // let { city, state } = this.state;
+
+    // if (props.city && props.state) {
+    // let cityCopy = props.city.replace(' ', '+');
+    console.log('city: ' + props.cityLocation + 'State:' + props.stateLocation);
+
+    //api call
+
+    // this.setState(
+    //   {
+    //     loading: true,
+    //     bubbleColor: '',
+    //     quickColor: '',
+    //     mergeColor: '',
+    //   }
+    // () => {}
+    //   );
+    // } else {
+    //   self.setState({
+    //     message: 'Please enter valid city and state',
+    //     error: true,
+    //   });
+    // }
+    // }
+  };
   return (
     <div className='controls'>
       <div className='info-container'>
@@ -15,47 +65,50 @@ const Controls = () => {
         </p>
       </div>
 
-      {/* <div>
       <div>
-        <h2>Location</h2>
-      </div>
+        <div>
+          <h2>Location</h2>
+        </div>
 
-      <form onSubmit={this.onSubmit}>
-        <div className='location-container'>
-          <div>
-            <label>City:</label>
+        <form onSubmit={onFormSubmit}>
+          <div className='location-container'>
+            <div>
+              <label>City:</label>
 
-            <input
-              type='text'
-              name='city'
-              className='input-text'
-              value={city}
-              onChange={this.onChange}
-            />
-          </div>
+              <input
+                type='text'
+                name='city'
+                className='input-text'
+                // value={city}
+                onChange={onCityInputChange}
+              />
+            </div>
 
-          <div>
-            <label>State:</label>
+            <div>
+              <label>State:</label>
 
-            <input
-              type='text'
-              name='state'
-              className='input-text'
-              value={state}
-              onChange={this.onChange}
-            />
-          </div>
+              <input
+                type='text'
+                name='state'
+                className='input-text'
+                // value={state}
+                onChange={onStateInputChange}
+              />
+            </div>
 
-          <div>
-            <div className='buttonHolder'>
-              <button className='btn' style={{ color: this.state.buttonColor }}>
-                Submit Location
-              </button>
+            <div>
+              <div className='buttonHolder'>
+                <button
+                  className='btn'
+                  // style={{ color: this.state.buttonColor }}
+                >
+                  Submit Location
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      </form>
-    </div> */}
+        </form>
+      </div>
 
       <div className='algorithms-container'>
         <div>
@@ -100,4 +153,16 @@ const Controls = () => {
   );
 };
 
-export default Controls;
+const mapStateToProps = state => {
+  return {
+    jobData: state.jobData,
+    cityLocation: state.cityLocation,
+    stateLocation: state.stateLocation,
+  };
+};
+
+export default connect(mapStateToProps, {
+  fetchJobData,
+  updateStateLocation,
+  updateCityLocation,
+})(Controls);

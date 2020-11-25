@@ -14,7 +14,7 @@ const BarGraph = ({ resultArray }) => {
   const renderList = () => {
     return resultArray.map((value, index) => {
       return (
-        <div className='bargroup' key={value[2]}>
+        <div className='bargroup' key={value[0]}>
           <div
             className='bar'
             style={{
