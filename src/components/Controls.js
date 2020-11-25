@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 // import axios from 'axios';
 import { connect } from 'react-redux';
 import {
@@ -9,31 +9,89 @@ import {
 } from '../actions';
 import BubbleSort from './sortingAlgorithms/BubbleSort';
 import MergeSort from './sortingAlgorithms/MergeSort';
+import QuickSort from './sortingAlgorithms/QuickSort';
 
 const Controls = props => {
+  const [loading, setLoading] = useState(false);
   const city = props.cityLocation;
   const state = props.stateLocation;
-  const onCityInputChange = e => {
-    props.updateCityLocation(e.target.value);
-    // this.setState({
-    //   [e.target.name]: e.target.value,
-    // });
-  };
-  const onStateInputChange = e => {
-    props.updateStateLocation(e.target.value);
-    console.log(props.cityLocation);
-  };
-  const onFormSubmit = e => {
+
+  const onCityInputChange = e => props.updateCityLocation(e.target.value);
+  const onStateInputChange = e => props.updateStateLocation(e.target.value);
+
+  useEffect(() => {
+    console.log('HERE');
+    if (loading === true || !props.jobData) {
+      console.log('in hloading');
+      const fetchData = async () => {
+        await props.fetchJobData('worcester', 'ma');
+        console.log('DONE');
+        console.log(props.jobData);
+        setLoading(false);
+      };
+      fetchData();
+      //   .then(res => {
+      console.log(props.jobData);
+      // });
+    }
+  }, [loading, props.jobData]);
+  const onFormSubmit = async e => {
     e.preventDefault();
     // var self = this;
     // if (props.onSort === false) {
     let resultArrayFetch = [];
+
     // let { city, state } = this.state;
 
     // if (props.city && props.state) {
     // let cityCopy = props.city.replace(' ', '+');
     console.log('city: ' + props.cityLocation + 'State:' + props.stateLocation);
+    await props.fetchJobData('worcester', 'ma').then(res => {
+      console.log(res);
+    });
+    // console.log(props.jobData);
+    // .then(response => {
+    // console.log('RESPONSE' + response);
+    // response = response.data;
+    // let totalNumberOfJobs = 0;
+    // Object.values(response).forEach(function(value) {
+    //   totalNumberOfJobs += value;
+    // });
 
+    // for (const [key, value] of Object.entries(response)) {
+    //   let keyResult = key;
+    //   let percentage = ((value / totalNumberOfJobs) * 100).toFixed(2);
+    //   resultArrayFetch.push([keyResult, percentage]);
+    // }
+
+    // // if (resultArrayFetch.length < 10 || !resultArrayFetch) {
+    // //   self.setState({
+    // //     message:
+    // //       'Cannot find input location, please enter valid city and state',
+    // //     loading: false,
+    // //     error: true,
+    // //   });
+    // // } else {
+    // resultArrayFetch.forEach((element, index) => {
+    //   let percent = element[1];
+    //   element[1] = parseFloat(percent);
+
+    //   //push 0 to every element, later will use to update color of bar during sort
+    //   element.push(0);
+    //   //   resultArrayFetch.push([keyResult(name), percentage, color]);
+    // });
+    // const resultArrayCopy = JSON.parse(JSON.stringify(resultArrayFetch));
+
+    // // self.setState({
+    // //   loading: false,
+    // //   resultArrayOriginal: resultArrayCopy,
+    // //   resultArray: resultArrayFetch,
+    // //   locationSubmitted: true,
+    // //   initialData: true,
+    // //   error: false,
+    // // });
+    // // }
+    // });
     //api call
 
     // this.setState(
@@ -70,7 +128,13 @@ const Controls = props => {
           <h2>Location</h2>
         </div>
 
-        <form onSubmit={onFormSubmit}>
+        <form
+          onSubmit={e => {
+            e.preventDefault();
+
+            setLoading(true);
+          }}
+        >
           <div className='location-container'>
             <div>
               <label>City:</label>
@@ -120,6 +184,7 @@ const Controls = props => {
 
         <div>
           <MergeSort />
+
           {/* <button
             onClick={self.quickSort}
             className='sortingAlgorithm'
@@ -127,6 +192,9 @@ const Controls = props => {
           >
             Quick Sort
           </button> */}
+        </div>
+        <div>
+          <QuickSort />
         </div>
 
         {/* <div>

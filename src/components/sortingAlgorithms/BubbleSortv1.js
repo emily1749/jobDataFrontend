@@ -111,117 +111,109 @@ import { updateResultArray, updateBubbleStart, setOnSort } from '../../actions';
 const BubbleSort = props => {
   let dataArray = [...props.resultArray];
 
-  // useEffect(() => {
-  //   if (props.bubbleStart === true && props.onSort === false) {
-  const startBubbleSort = dataArray => {
-    props.setOnSort(true);
+  useEffect(() => {
+    if (props.bubbleStart === true && props.onSort === false) {
+      props.setOnSort(true);
+      console.log('Here');
+      let count = 0;
+      let round = 0;
 
-    let count = 0;
-    let round = 0;
+      //flag indicates whether a bar has been swapped during this round
+      let flag = true;
+      let endFlag = false;
 
-    //flag indicates whether a bar has been swapped during this round
-    let flag = true;
-    let endFlag = false;
+      // let dataArray = [...props.resultArray];
 
-    // let dataArray = [...props.resultArray];
-
-    let myInterval = setInterval(async () => {
-      console.log('ARR' + dataArray);
-      console.log('ROUND' + round);
-      console.log('COUNT' + count);
-
-      function sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-      }
-
-      async function swap(input, indexA, indexB) {
-        flag = false;
-        let temp = input[indexA];
-        input[indexA] = input[indexB];
-        input[indexB] = temp;
-        dataArray = input;
-        props.updateResultArray(dataArray);
-        await sleep(100);
-      }
-
-      if (endFlag === true || count === 9) {
-        if (dataArray[8][1] > dataArray[9][1]) {
-          // let dataArray = [...props.resultArray];
-          swap(dataArray, 8, 9);
-          props.updateResultArray(dataArray);
+      let myInterval = setInterval(() => {
+        console.log('ROUND' + round);
+        console.log('COUNT' + count);
+        function swap(input, indexA, indexB) {
+          flag = false;
+          let temp = input[indexA];
+          input[indexA] = input[indexB];
+          input[indexB] = temp;
+          return input;
         }
 
-        if (round < 9) {
-          // let dataArray = [...props.resultArray];
+        if (endFlag === true || count === 9) {
+          let dataArray = [...props.resultArray];
 
-          dataArray[9 - round][3] = 2;
-          dataArray[9 - round - 1][3] = 0;
-        } else {
-          // let dataArray = [...props.resultArray];
-
-          dataArray[9 - round][3] = 2;
-        }
-
-        props.updateResultArray(dataArray);
-        round++;
-        //if at the end of the array and no swaps, all items are sorted
-        if (flag === true) {
-          // let dataArray = [...props.resultArray];
-          //Update each bar color to green
-          dataArray.forEach(element => {
-            element[3] = 2;
-          });
-          props.updateResultArray(
-            dataArray
-            // onSort: false,
-            //   buttonColor: '#fff',
-          );
-          // this.props.onSort(false);
-          // console.log('PROPS' + this.props.onSortBool);
-          console.log('CLEAR');
-          props.updateBubbleStart(false);
-          clearInterval(myInterval);
-        } else {
-          count = 0;
-          flag = true;
-        }
-        endFlag = false;
-        return;
-      } else {
-        if (count === 0) {
-          //if first count, have to color first two yellow
-          dataArray[0][3] = 1;
-          dataArray[1][3] = 1;
-          props.updateResultArray(dataArray);
-          count++;
-        } else {
-          if (dataArray[count - 1][1] > dataArray[count][1]) {
-            swap(dataArray, count - 1, count);
+          if (dataArray[8][1] > dataArray[9][1]) {
+            let dataArray = [...props.resultArray];
+            swap(dataArray, 8, 9);
             props.updateResultArray(dataArray);
+          }
+
+          if (round < 9) {
+            let dataArray = [...props.resultArray];
+
+            dataArray[9 - round][3] = 2;
+            dataArray[9 - round - 1][3] = 0;
           } else {
-            if (dataArray[count + 1][3] !== 2) {
-              //if the next one isn't green/already sorted, continue
-              dataArray[count - 1][3] = 0;
-              dataArray[count + 1][3] = 1;
-              props.updateResultArray(dataArray);
-            } else if (dataArray[count + 1][3] === 2) {
-              endFlag = true;
-            }
+            let dataArray = [...props.resultArray];
+
+            dataArray[9 - round][3] = 2;
+          }
+
+          props.updateResultArray(dataArray);
+          round++;
+          //if at the end of the array and no swaps, all items are sorted
+          if (flag === true) {
+            let dataArray = [...props.resultArray];
+            //Update each bar color to green
+            dataArray.forEach(element => {
+              element[3] = 2;
+            });
+            props.updateResultArray(
+              dataArray
+              // onSort: false,
+              //   buttonColor: '#fff',
+            );
+            // this.props.onSort(false);
+            // console.log('PROPS' + this.props.onSortBool);
+            console.log('CLEAR');
+            props.updateBubbleStart(false);
+            clearInterval(myInterval);
+          } else {
+            count = 0;
+            flag = true;
+          }
+          endFlag = false;
+          return;
+        } else {
+          let dataArray = [...props.resultArray];
+          if (count === 0) {
+            //if first count, have to color first two yellow
+            dataArray[0][3] = 1;
+            dataArray[1][3] = 1;
+            props.updateResultArray(dataArray);
             count++;
+          } else {
+            if (dataArray[count - 1][1] > dataArray[count][1]) {
+              swap(dataArray, count - 1, count);
+              props.updateResultArray(dataArray);
+            } else {
+              if (dataArray[count + 1][3] !== 2) {
+                //if the next one isn't green/already sorted, continue
+                dataArray[count - 1][3] = 0;
+                dataArray[count + 1][3] = 1;
+                props.updateResultArray(dataArray);
+              } else if (dataArray[count + 1][3] === 2) {
+                endFlag = true;
+              }
+              count++;
+            }
           }
         }
-      }
-    }, 200);
-  };
-
-  //   }
-  // }, [props.bubbleStart, props.resultArray]);
+      }, 200);
+    }
+  }, [props.bubbleStart, props.resultArray]);
 
   return (
     <div>
       <button
         // onClick={() => bubbleSort(props.resultArray, props.updateResultArray)}
-        onClick={() => startBubbleSort(dataArray)}
+        onClick={() => props.updateBubbleStart(true)}
         className='sortingAlgorithm'
         // style={{ color: this.state.bubbleColor }}
       >

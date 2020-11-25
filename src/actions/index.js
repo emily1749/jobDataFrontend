@@ -2,8 +2,9 @@ import jobData from '../apis/jobData';
 
 export const fetchJobData = (city, state) => async dispatch => {
   const response = await jobData.get(`${city}/${state}`);
+  console.log(response.data);
 
-  dispatch({ type: 'FETCH_JOB_DATA', payload: response });
+  dispatch({ type: 'FETCH_JOB_DATA', payload: response.data });
 };
 
 export const setOnSort = boolean => {

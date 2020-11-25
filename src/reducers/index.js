@@ -12,7 +12,7 @@ export default combineReducers({
   resultArray: resultArrayReducer,
   bubbleStart: bubbleStartReducer,
   mergeStart: mergeStartReducer,
-  fetchJobData: fetchJobDataReducer,
+  jobData: fetchJobDataReducer,
   cityLocation: cityLocationReducer,
   stateLocation: stateLocationReducer,
 });
